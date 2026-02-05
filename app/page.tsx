@@ -7,32 +7,26 @@ const features = [
   {
     title: 'Program Builder',
     description: 'Create custom strength, cardio, HYROX, and hybrid programs with our drag-and-drop builder.',
-    icon: '💪',
   },
   {
     title: 'Client Management',
     description: 'Manage unlimited clients, track their progress, and assign personalized programs.',
-    icon: '👥',
   },
   {
     title: 'Nutrition Plans',
     description: 'Create and assign meal plans with macro tracking. Available on Pro and above.',
-    icon: '🥗',
   },
   {
     title: 'Progress Tracking',
     description: 'Clients log workouts, track 1RMs, and upload progress photos automatically.',
-    icon: '📈',
   },
   {
     title: 'Custom Branding',
     description: 'White-label the app with your logo and brand colors. Studio plan and above.',
-    icon: '🎨',
   },
   {
     title: 'Mobile App',
     description: 'Clients access workouts from any device. PWA support for home screen install.',
-    icon: '📱',
   },
 ];
 
@@ -129,7 +123,7 @@ export default function LandingPage() {
       <section className="py-20 md:py-32">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <div className="inline-block px-4 py-1 bg-[var(--accent)]/10 text-[var(--accent)] text-sm font-medium rounded-full mb-6">
-            14-day free trial • No credit card required
+            14-day free trial — No credit card required
           </div>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
             The platform built for
@@ -166,7 +160,6 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature) => (
               <div key={feature.title} className="bg-[var(--card)] border border-[var(--card-border)] rounded-2xl p-6">
-                <div className="text-4xl mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
                 <p className="text-[var(--muted)]">{feature.description}</p>
               </div>
@@ -226,7 +219,7 @@ export default function LandingPage() {
                 <ul className="mt-6 space-y-3">
                   {tier.features.map((feature) => (
                     <li key={feature} className="flex items-center gap-2 text-sm">
-                      <span className="text-green-500">✓</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
                       {feature}
                     </li>
                   ))}
