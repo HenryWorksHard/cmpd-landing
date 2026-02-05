@@ -93,31 +93,31 @@ export default function LandingPage() {
   const [annualBilling, setAnnualBilling] = useState(false);
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white">
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       {/* Nav */}
-      <nav className="border-b border-zinc-800 sticky top-0 bg-zinc-950/80 backdrop-blur-md z-50">
+      <nav className="border-b border-[var(--card-border)] sticky top-0 bg-[var(--background)]/80 backdrop-blur-md z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-yellow-400 rounded-xl flex items-center justify-center font-bold text-black">
+            <div className="w-10 h-10 bg-[var(--accent)] rounded-xl flex items-center justify-center font-bold text-black">
               C
             </div>
             <span className="font-bold text-xl">CMPD</span>
           </Link>
           <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-zinc-400 hover:text-white transition-colors">Features</a>
-            <a href="#pricing" className="text-zinc-400 hover:text-white transition-colors">Pricing</a>
-            <a href="#testimonials" className="text-zinc-400 hover:text-white transition-colors">Reviews</a>
+            <a href="#features" className="text-[var(--muted)] hover:text-[var(--foreground)] transition-colors">Features</a>
+            <a href="#pricing" className="text-[var(--muted)] hover:text-[var(--foreground)] transition-colors">Pricing</a>
+            <a href="#testimonials" className="text-[var(--muted)] hover:text-[var(--foreground)] transition-colors">Reviews</a>
           </div>
           <div className="flex items-center gap-4">
             <a
               href="https://eddytrains-admin.vercel.app/login"
-              className="text-zinc-400 hover:text-white transition-colors"
+              className="text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
             >
               Sign In
             </a>
             <a
               href="https://eddytrains-admin.vercel.app/signup"
-              className="px-4 py-2 bg-yellow-400 hover:bg-yellow-300 text-black font-semibold rounded-lg transition-colors"
+              className="px-4 py-2 bg-[var(--accent)] hover:opacity-90 text-black font-semibold rounded-lg transition-opacity"
             >
               Start Free Trial
             </a>
@@ -128,27 +128,27 @@ export default function LandingPage() {
       {/* Hero */}
       <section className="py-20 md:py-32">
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <div className="inline-block px-4 py-1 bg-yellow-400/10 text-yellow-400 text-sm font-medium rounded-full mb-6">
+          <div className="inline-block px-4 py-1 bg-[var(--accent)]/10 text-[var(--accent)] text-sm font-medium rounded-full mb-6">
             14-day free trial • No credit card required
           </div>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
             The platform built for
             <br />
-            <span className="text-yellow-400">fitness professionals</span>
+            <span className="text-[var(--accent)]">fitness professionals</span>
           </h1>
-          <p className="text-xl text-zinc-400 max-w-2xl mx-auto mb-8">
+          <p className="text-xl text-[var(--muted)] max-w-2xl mx-auto mb-8">
             Stop paying per client. Build programs, manage clients, and grow your business with one simple monthly subscription.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="https://eddytrains-admin.vercel.app/signup"
-              className="px-8 py-4 bg-yellow-400 hover:bg-yellow-300 text-black font-bold text-lg rounded-xl transition-colors"
+              className="px-8 py-4 bg-[var(--accent)] hover:opacity-90 text-black font-bold text-lg rounded-xl transition-opacity"
             >
               Start Your Free Trial
             </a>
             <a
               href="#pricing"
-              className="px-8 py-4 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold text-lg rounded-xl transition-colors"
+              className="px-8 py-4 bg-[var(--card)] border border-[var(--card-border)] hover:border-[var(--muted)] font-semibold text-lg rounded-xl transition-colors"
             >
               View Pricing
             </a>
@@ -157,18 +157,18 @@ export default function LandingPage() {
       </section>
 
       {/* Features */}
-      <section id="features" className="py-20 border-t border-zinc-800">
+      <section id="features" className="py-20 border-t border-[var(--card-border)]">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Everything you need to run your fitness business</h2>
-            <p className="text-zinc-400 text-lg">From program creation to client management, we've got you covered.</p>
+            <p className="text-[var(--muted)] text-lg">From program creation to client management, we've got you covered.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature) => (
-              <div key={feature.title} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+              <div key={feature.title} className="bg-[var(--card)] border border-[var(--card-border)] rounded-2xl p-6">
                 <div className="text-4xl mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-zinc-400">{feature.description}</p>
+                <p className="text-[var(--muted)]">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -176,19 +176,19 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-20 border-t border-zinc-800">
+      <section id="pricing" className="py-20 border-t border-[var(--card-border)]">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple, transparent pricing</h2>
-            <p className="text-zinc-400 text-lg mb-8">No per-client fees. No hidden charges. Just one monthly subscription.</p>
+            <p className="text-[var(--muted)] text-lg mb-8">No per-client fees. No hidden charges. Just one monthly subscription.</p>
             
             {/* Billing toggle */}
             <div className="flex items-center justify-center gap-4">
-              <span className={annualBilling ? 'text-zinc-500' : 'text-white'}>Monthly</span>
+              <span className={annualBilling ? 'text-[var(--muted)]' : 'text-[var(--foreground)]'}>Monthly</span>
               <button
                 onClick={() => setAnnualBilling(!annualBilling)}
                 className={`w-14 h-7 rounded-full p-1 transition-colors ${
-                  annualBilling ? 'bg-yellow-400' : 'bg-zinc-700'
+                  annualBilling ? 'bg-[var(--accent)]' : 'bg-[var(--card-border)]'
                 }`}
               >
                 <div
@@ -197,8 +197,8 @@ export default function LandingPage() {
                   }`}
                 />
               </button>
-              <span className={annualBilling ? 'text-white' : 'text-zinc-500'}>
-                Annual <span className="text-green-400 text-sm">(Save 20%)</span>
+              <span className={annualBilling ? 'text-[var(--foreground)]' : 'text-[var(--muted)]'}>
+                Annual <span className="text-green-500 text-sm">(Save 20%)</span>
               </span>
             </div>
           </div>
@@ -207,26 +207,26 @@ export default function LandingPage() {
             {tiers.map((tier) => (
               <div
                 key={tier.name}
-                className={`bg-zinc-900 rounded-2xl p-6 border-2 ${
-                  tier.popular ? 'border-yellow-400' : 'border-zinc-800'
+                className={`bg-[var(--card)] rounded-2xl p-6 border-2 ${
+                  tier.popular ? 'border-[var(--accent)]' : 'border-[var(--card-border)]'
                 }`}
               >
                 {tier.popular && (
-                  <div className="text-yellow-400 text-sm font-medium mb-2">Most Popular</div>
+                  <div className="text-[var(--accent)] text-sm font-medium mb-2">Most Popular</div>
                 )}
                 <h3 className="text-xl font-semibold">{tier.name}</h3>
                 <div className="mt-4">
                   <span className="text-4xl font-bold">
                     ${annualBilling ? Math.round(tier.price * 0.8) : tier.price}
                   </span>
-                  <span className="text-zinc-400">/mo</span>
+                  <span className="text-[var(--muted)]">/mo</span>
                 </div>
-                <p className="text-zinc-400 text-sm mt-1">{tier.clients}</p>
+                <p className="text-[var(--muted)] text-sm mt-1">{tier.clients}</p>
 
                 <ul className="mt-6 space-y-3">
                   {tier.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2 text-sm text-zinc-300">
-                      <span className="text-green-400">✓</span>
+                    <li key={feature} className="flex items-center gap-2 text-sm">
+                      <span className="text-green-500">✓</span>
                       {feature}
                     </li>
                   ))}
@@ -234,10 +234,10 @@ export default function LandingPage() {
 
                 <a
                   href="https://eddytrains-admin.vercel.app/signup"
-                  className={`mt-6 block text-center py-3 rounded-xl font-semibold transition-colors ${
+                  className={`mt-6 block text-center py-3 rounded-xl font-semibold transition-all ${
                     tier.popular
-                      ? 'bg-yellow-400 hover:bg-yellow-300 text-black'
-                      : 'bg-zinc-800 hover:bg-zinc-700 text-white'
+                      ? 'bg-[var(--accent)] hover:opacity-90 text-black'
+                      : 'bg-[var(--card-border)] hover:bg-[var(--muted)]/20'
                   }`}
                 >
                   {tier.cta}
@@ -249,19 +249,19 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-20 border-t border-zinc-800">
+      <section id="testimonials" className="py-20 border-t border-[var(--card-border)]">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Loved by trainers worldwide</h2>
-            <p className="text-zinc-400 text-lg">Join hundreds of fitness professionals growing their business with CMPD.</p>
+            <p className="text-[var(--muted)] text-lg">Join hundreds of fitness professionals growing their business with CMPD.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((t) => (
-              <div key={t.name} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-                <p className="text-zinc-300 mb-4">"{t.text}"</p>
+              <div key={t.name} className="bg-[var(--card)] border border-[var(--card-border)] rounded-2xl p-6">
+                <p className="text-[var(--muted)] mb-4">"{t.text}"</p>
                 <div>
                   <p className="font-semibold">{t.name}</p>
-                  <p className="text-zinc-500 text-sm">{t.role}</p>
+                  <p className="text-[var(--muted)] text-sm">{t.role}</p>
                 </div>
               </div>
             ))}
@@ -270,15 +270,15 @@ export default function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 border-t border-zinc-800">
+      <section className="py-20 border-t border-[var(--card-border)]">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to grow your fitness business?</h2>
-          <p className="text-zinc-400 text-lg mb-8">
+          <p className="text-[var(--muted)] text-lg mb-8">
             Start your 14-day free trial today. No credit card required.
           </p>
           <a
             href="https://eddytrains-admin.vercel.app/signup"
-            className="inline-block px-8 py-4 bg-yellow-400 hover:bg-yellow-300 text-black font-bold text-lg rounded-xl transition-colors"
+            className="inline-block px-8 py-4 bg-[var(--accent)] hover:opacity-90 text-black font-bold text-lg rounded-xl transition-opacity"
           >
             Start Your Free Trial
           </a>
@@ -286,16 +286,16 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-800 py-12">
+      <footer className="border-t border-[var(--card-border)] py-12">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center font-bold text-black text-sm">
+              <div className="w-8 h-8 bg-[var(--accent)] rounded-lg flex items-center justify-center font-bold text-black text-sm">
                 C
               </div>
               <span className="font-semibold">CMPD</span>
             </div>
-            <p className="text-zinc-500 text-sm">
+            <p className="text-[var(--muted)] text-sm">
               © {new Date().getFullYear()} CMPD. All rights reserved.
             </p>
           </div>
