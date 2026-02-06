@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const features = [
   {
@@ -87,11 +88,8 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="border-b border-[var(--card-border)] sticky top-0 bg-[var(--background)]/80 backdrop-blur-md z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[var(--accent)] rounded-xl flex items-center justify-center font-bold text-black">
-              C
-            </div>
-            <span className="font-bold text-xl">CMPD</span>
+          <Link href="/" className="flex items-center">
+            <Image src="/logo.png" alt="CMPD" width={120} height={40} className="h-10 w-auto" />
           </Link>
           <div className="hidden md:flex items-center gap-8">
             <a href="#features" className="text-[var(--muted)] hover:text-[var(--foreground)] transition-colors">Features</a>
@@ -281,11 +279,8 @@ export default function LandingPage() {
       <footer className="border-t border-[var(--card-border)] py-12">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-[var(--accent)] rounded-lg flex items-center justify-center font-bold text-black text-sm">
-                C
-              </div>
-              <span className="font-semibold">CMPD</span>
+            <div className="flex items-center">
+              <Image src="/logo.png" alt="CMPD" width={100} height={32} className="h-8 w-auto" />
             </div>
             <p className="text-[var(--muted)] text-sm">
               © {new Date().getFullYear()} CMPD. All rights reserved.
