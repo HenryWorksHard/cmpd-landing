@@ -36,7 +36,6 @@ const tiers = [
     price: 39,
     clients: 'Up to 10 clients',
     features: ['Program builder', 'Client management', 'Progress tracking', 'Mobile app access'],
-    cta: 'Start Free Trial',
     popular: false,
   },
   {
@@ -44,7 +43,6 @@ const tiers = [
     price: 79,
     clients: 'Up to 30 clients',
     features: ['Everything in Starter', 'Nutrition plans', 'Priority support', 'Client messaging'],
-    cta: 'Start Free Trial',
     popular: true,
   },
   {
@@ -52,7 +50,6 @@ const tiers = [
     price: 149,
     clients: 'Up to 75 clients',
     features: ['Everything in Pro', 'Custom branding', 'Team accounts', 'API access'],
-    cta: 'Start Free Trial',
     popular: false,
   },
   {
@@ -60,7 +57,6 @@ const tiers = [
     price: 299,
     clients: 'Unlimited clients',
     features: ['Everything in Studio', 'White-label option', 'Dedicated support', 'Custom integrations'],
-    cta: 'Contact Sales',
     popular: false,
   },
 ];
@@ -173,7 +169,10 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple, transparent pricing</h2>
-            <p className="text-[var(--muted)] text-lg mb-8">No per-client fees. No hidden charges. Just one monthly subscription.</p>
+            <p className="text-[var(--muted)] text-lg mb-4">No per-client fees. No hidden charges. Just one monthly subscription.</p>
+            <p className="text-[var(--accent)] font-medium mb-8">
+              Try all features free for 14 days — pick your plan when you&apos;re ready.
+            </p>
             
             {/* Billing toggle */}
             <div className="flex items-center justify-center gap-4">
@@ -196,7 +195,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {tiers.map((tier) => (
               <div
                 key={tier.name}
@@ -224,19 +223,19 @@ export default function LandingPage() {
                     </li>
                   ))}
                 </ul>
-
-                <a
-                  href="https://eddytrains-admin.vercel.app/signup"
-                  className={`mt-6 block text-center py-3 rounded-xl font-semibold transition-all ${
-                    tier.popular
-                      ? 'bg-[var(--accent)] hover:opacity-90 text-black'
-                      : 'bg-[var(--card-border)] hover:bg-[var(--muted)]/20'
-                  }`}
-                >
-                  {tier.cta}
-                </a>
               </div>
             ))}
+          </div>
+
+          {/* Single CTA */}
+          <div className="text-center">
+            <a
+              href="https://eddytrains-admin.vercel.app/signup"
+              className="inline-block px-8 py-4 bg-[var(--accent)] hover:opacity-90 text-black font-bold text-lg rounded-xl transition-opacity"
+            >
+              Start Your 14-Day Free Trial
+            </a>
+            <p className="text-[var(--muted)] text-sm mt-3">Full access to all features. No credit card required.</p>
           </div>
         </div>
       </section>
