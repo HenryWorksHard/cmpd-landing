@@ -1,26 +1,80 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --muted: #6b7280;
-  --card: #f9fafb;
-  --card-border: #e5e7eb;
-  --accent: #FACC15;
-}
+@theme inline {
+  --color-background: #030712;
+  --color-foreground: #fafafa;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #09090b;
-    --foreground: #fafafa;
-    --muted: #a1a1aa;
-    --card: #18181b;
-    --card-border: #27272a;
-  }
+  /* Neutral palette */
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f4f4f5;
+  --color-neutral-200: #e4e4e7;
+  --color-neutral-300: #d4d4d8;
+  --color-neutral-400: #a1a1aa;
+  --color-neutral-500: #71717a;
+  --color-neutral-600: #52525b;
+  --color-neutral-700: #3f3f46;
+  --color-neutral-800: #27272a;
+  --color-neutral-900: #18181b;
+  --color-neutral-950: #030712;
+
+  /* CMPD Yellow accent */
+  --color-accent: #FACC15;
+  --color-accent-light: #FDE047;
+  --color-accent-dark: #EAB308;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background-color: #FACC15;
+  color: #030712;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #18181b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FACC15;
+}
+
+*:focus-visible {
+  outline: 2px solid #FACC15;
+  outline-offset: 2px;
+}
+
+/* CMPD gradient text - yellow gold */
+.gradient-text {
+  background: linear-gradient(135deg, #FACC15 0%, #FDE047 50%, #EAB308 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow effect */
+.glow {
+  box-shadow: 0 0 40px rgba(250, 204, 21, 0.3);
+}
+
+.glow-sm {
+  box-shadow: 0 0 20px rgba(250, 204, 21, 0.2);
 }
