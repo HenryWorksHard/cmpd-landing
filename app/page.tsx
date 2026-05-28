@@ -104,13 +104,13 @@ export default function LandingPage() {
           </div>
           <div className="flex items-center gap-4">
             <a
-              href="https://eddytrains-admin.vercel.app/login"
+              href="https://app.cmpdcollective.com/login"
               className="text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
             >
               Sign In
             </a>
             <a
-              href="https://eddytrains-admin.vercel.app/signup"
+              href="https://app.cmpdcollective.com/signup"
               className="px-4 py-2 bg-[var(--accent)] hover:opacity-90 text-black font-semibold rounded-lg transition-opacity"
             >
               Start Free Trial
@@ -135,7 +135,7 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="https://eddytrains-admin.vercel.app/signup"
+              href="https://app.cmpdcollective.com/signup"
               className="px-8 py-4 bg-[var(--accent)] hover:opacity-90 text-black font-bold text-lg rounded-xl transition-opacity"
             >
               Start Your Free Trial
@@ -226,7 +226,7 @@ export default function LandingPage() {
                 </ul>
 
                 <a
-                  href="https://eddytrains-admin.vercel.app/signup"
+                  href="https://app.cmpdcollective.com/signup"
                   className={`mt-6 block text-center py-3 rounded-xl font-semibold transition-all ${
                     tier.popular
                       ? 'bg-[var(--accent)] hover:opacity-90 text-black'
@@ -270,7 +270,7 @@ export default function LandingPage() {
             Start your 14-day free trial today. No credit card required.
           </p>
           <a
-            href="https://eddytrains-admin.vercel.app/signup"
+            href="https://app.cmpdcollective.com/signup"
             className="inline-block px-8 py-4 bg-[var(--accent)] hover:opacity-90 text-black font-bold text-lg rounded-xl transition-opacity"
           >
             Start Your Free Trial
