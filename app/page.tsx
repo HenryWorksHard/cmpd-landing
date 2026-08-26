@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { programs, SIGNUP_URL } from './programs';
+import { programs } from './programs';
 
 // ─────────────────────────────────────────────────────────────────────────
 // PLACEHOLDER CONTENT — swap for real details before promoting:
@@ -202,7 +202,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Programs */}
+      {/* What we cover — informational only. NO prices, NO buy buttons here:
+          the quiz is the single path to a program, price, and purchase. This
+          section just reassures people their injury is covered, then funnels
+          them into the quiz. */}
       <section id="programs" className="py-24 lg:py-32 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,rgba(250,204,21,0.08),transparent)]" />
 
@@ -214,50 +217,40 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <span className="text-sm font-medium text-accent uppercase tracking-wider">Programs</span>
+            <span className="text-sm font-medium text-accent uppercase tracking-wider">What we cover</span>
             <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-neutral-50">
-              Find the program for your injury
+              A program for your injury
             </h2>
             <p className="mt-4 text-lg text-neutral-400">
-              One payment. Yours to keep. Follow it in the app for as long as you need.
+              Take the 60-second quiz and we&apos;ll match you to the right one — no guesswork.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {programs.map((program, index) => (
               <motion.div
-                key={program.name}
+                key={program.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.08 }}
-                className="group flex flex-col bg-neutral-900 rounded-2xl p-6 border-2 border-neutral-800 hover:border-accent transition-all duration-300"
+                className="bg-neutral-900 rounded-2xl p-6 border border-neutral-800"
               >
                 <span className="text-xs font-medium text-accent uppercase tracking-wider">{program.area}</span>
                 <h3 className="mt-2 text-xl font-semibold text-neutral-50">{program.name}</h3>
-                <p className="mt-2 text-neutral-400 leading-relaxed text-sm flex-1">{program.blurb}</p>
-
-                <div className="mt-6 pt-6 border-t border-neutral-800 flex items-end justify-between">
-                  <div>
-                    <span className="text-3xl font-bold text-neutral-50">${program.price}</span>
-                    <span className="text-neutral-500 text-sm"> one-time</span>
-                    <p className="text-sm text-neutral-500 mt-1">{program.weeks}-week program</p>
-                  </div>
-                </div>
-
-                <a
-                  href={SIGNUP_URL}
-                  className="mt-6 block w-full py-2.5 text-center text-sm font-medium rounded-md bg-accent text-neutral-950 hover:bg-accent-light transition-colors"
-                >
-                  Get this program
-                </a>
+                <p className="mt-2 text-neutral-400 leading-relaxed text-sm">{program.blurb}</p>
               </motion.div>
             ))}
           </div>
 
-          <p className="text-center text-neutral-500 text-sm mt-12">
-            Not sure which one? <Link href="/quiz" className="text-accent hover:underline">Answer a few questions</Link> and we&apos;ll match you.
-          </p>
+          <div className="mt-14 text-center">
+            <Link
+              href="/quiz"
+              className="inline-block px-8 py-3 bg-accent hover:bg-accent-light text-neutral-950 font-semibold rounded-md transition-colors glow-sm"
+            >
+              Find your program
+            </Link>
+          </div>
         </div>
       </section>
 
