@@ -1,8 +1,16 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Sora } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+// Sora matches the CMPD app's industrial heading font (used on login,
+// reset, and admin screens). Exposed as a CSS variable so globals.css can
+// apply it to the .font-heading class on hero + section titles.
+const sora = Sora({
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+  variable: "--font-sora",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "CMPD | Fitness Management Platform for Personal Trainers",
@@ -22,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={sora.variable}>{children}</body>
     </html>
   );
 }

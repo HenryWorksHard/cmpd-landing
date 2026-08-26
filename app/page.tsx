@@ -95,7 +95,7 @@ export default function LandingPage() {
             <div className="w-10 h-10 bg-[var(--accent)] rounded-xl flex items-center justify-center font-bold text-black">
               C
             </div>
-            <span className="font-bold text-xl">CMPD</span>
+            <span className="font-heading font-bold text-xl tracking-wide">CMPD</span>
           </Link>
           <div className="hidden md:flex items-center gap-8">
             <a href="#features" className="text-[var(--muted)] hover:text-[var(--foreground)] transition-colors">Features</a>
@@ -125,7 +125,7 @@ export default function LandingPage() {
           <div className="inline-block px-4 py-1 bg-[var(--accent)]/10 text-[var(--accent)] text-sm font-medium rounded-full mb-6">
             14-day free trial — No credit card required
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+          <h1 className="font-heading text-4xl md:text-6xl font-extrabold mb-6 leading-tight tracking-tight">
             The platform built for
             <br />
             <span className="text-[var(--accent)]">fitness professionals</span>
@@ -154,7 +154,7 @@ export default function LandingPage() {
       <section id="features" className="py-20 border-t border-[var(--card-border)]">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Everything you need to run your fitness business</h2>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4 tracking-tight">Everything you need to run your fitness business</h2>
             <p className="text-[var(--muted)] text-lg">From program creation to client management, we've got you covered.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -172,7 +172,7 @@ export default function LandingPage() {
       <section id="pricing" className="py-20 border-t border-[var(--card-border)]">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple, transparent pricing</h2>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4 tracking-tight">Simple, transparent pricing</h2>
             <p className="text-[var(--muted)] text-lg mb-8">No per-client fees. No hidden charges. Just one monthly subscription.</p>
             
             {/* Billing toggle */}
@@ -245,7 +245,7 @@ export default function LandingPage() {
       <section id="testimonials" className="py-20 border-t border-[var(--card-border)]">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Loved by trainers worldwide</h2>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4 tracking-tight">Loved by trainers worldwide</h2>
             <p className="text-[var(--muted)] text-lg">Join hundreds of fitness professionals growing their business with CMPD.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -265,7 +265,7 @@ export default function LandingPage() {
       {/* CTA */}
       <section className="py-20 border-t border-[var(--card-border)]">
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to grow your fitness business?</h2>
+          <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4 tracking-tight">Ready to grow your fitness business?</h2>
           <p className="text-[var(--muted)] text-lg mb-8">
             Start your 14-day free trial today. No credit card required.
           </p>
@@ -286,7 +286,7 @@ export default function LandingPage() {
               <div className="w-8 h-8 bg-[var(--accent)] rounded-lg flex items-center justify-center font-bold text-black text-sm">
                 C
               </div>
-              <span className="font-semibold">CMPD</span>
+              <span className="font-heading font-semibold tracking-wide">CMPD</span>
             </div>
             <p className="text-[var(--muted)] text-sm">
               © {new Date().getFullYear()} CMPD. All rights reserved.

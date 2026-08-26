@@ -1,26 +1,31 @@
 @import "tailwindcss";
 
+/* Dark-first to match the CMPD app, which is a committed pure-black (#000)
+   experience. Previously this landing defaulted to a WHITE theme (only
+   going dark if the visitor's OS preferred it), so a light-mode visitor
+   hit a white marketing page then clicked through to a pure-black app —
+   jarring. Now the landing IS black + yellow like the app from the first
+   second. Palette values (card #18181b, border #27272a, muted #a1a1aa,
+   accent #FACC15) mirror the app's globals.css exactly. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --muted: #6b7280;
-  --card: #f9fafb;
-  --card-border: #e5e7eb;
+  --background: #000000;
+  --foreground: #ededed;
+  --muted: #a1a1aa;
+  --card: #18181b;
+  --card-border: #27272a;
   --accent: #FACC15;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #09090b;
-    --foreground: #fafafa;
-    --muted: #a1a1aa;
-    --card: #18181b;
-    --card-border: #27272a;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Sora (industrial headings) is loaded in layout.tsx and applied to
+     headings via the .font-heading class; body stays on the system stack. */
+  font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+/* Signature CMPD heading treatment — Sora, matching the app's login /
+   admin headings. Applied to the hero + section titles. */
+.font-heading {
+  font-family: var(--font-sora), system-ui, sans-serif;
 }
