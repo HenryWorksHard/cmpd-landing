@@ -1,7 +1,10 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #030712;
+  /* True black to match the CMPD app exactly (app is #000, this was
+     #030712). neutral-950 also → #000 so bg-neutral-950 (nav, page) is
+     the same true black across the site. */
+  --color-background: #000000;
   --color-foreground: #fafafa;
 
   /* Neutral palette */
@@ -15,12 +18,21 @@
   --color-neutral-700: #3f3f46;
   --color-neutral-800: #27272a;
   --color-neutral-900: #18181b;
-  --color-neutral-950: #030712;
+  --color-neutral-950: #000000;
 
   /* CMPD Yellow accent */
   --color-accent: #FACC15;
   --color-accent-light: #FDE047;
   --color-accent-dark: #EAB308;
+
+  /* Sora — the app's industrial heading font, applied to headings via
+     the sora variable set in layout.tsx. */
+  --font-heading: var(--font-sora), system-ui, sans-serif;
+}
+
+/* Match the app: Sora on the big headings, body stays on the sans stack. */
+h1, h2, .font-heading {
+  font-family: var(--font-heading);
 }
 
 body {
