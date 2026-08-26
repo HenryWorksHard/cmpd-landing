@@ -107,13 +107,13 @@ export default function LandingPage() {
             </div>
             <div className="flex items-center gap-4">
               <a
-                href="https://eddytrains-admin.vercel.app/login"
+                href="https://app.cmpdcollective.com/login"
                 className="text-sm font-medium text-neutral-400 hover:text-neutral-50 transition-colors"
               >
                 Sign In
               </a>
               <a
-                href="https://eddytrains-admin.vercel.app/signup"
+                href="https://app.cmpdcollective.com/signup"
                 className="px-5 py-2 text-sm font-medium rounded-md bg-accent text-neutral-950 hover:bg-accent-light transition-colors"
               >
                 Start Free Trial
@@ -170,7 +170,7 @@ export default function LandingPage() {
               className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
             >
               <a
-                href="https://eddytrains-admin.vercel.app/signup"
+                href="https://app.cmpdcollective.com/signup"
                 className="px-8 py-3 bg-accent hover:bg-accent-light text-neutral-950 font-semibold rounded-md transition-colors glow-sm"
               >
                 Start Your Free Trial
@@ -336,7 +336,7 @@ export default function LandingPage() {
                 </ul>
 
                 <a
-                  href="https://eddytrains-admin.vercel.app/signup"
+                  href="https://app.cmpdcollective.com/signup"
                   className={`mt-6 block w-full py-2.5 text-center text-sm font-medium rounded-md transition-all ${
                     tier.popular
                       ? 'bg-accent text-neutral-950 hover:bg-accent-light'
@@ -415,7 +415,7 @@ export default function LandingPage() {
               Start your 14-day free trial today. No credit card required.
             </p>
             <a
-              href="https://eddytrains-admin.vercel.app/signup"
+              href="https://app.cmpdcollective.com/signup"
               className="mt-10 inline-block px-8 py-4 bg-accent hover:bg-accent-light text-neutral-950 font-bold text-lg rounded-md transition-colors glow"
             >
               Start Your Free Trial
