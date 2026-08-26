@@ -66,7 +66,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <Link href="/" className="flex items-center">
-              <Image src="/logo.png" alt="CMPD" width={120} height={40} className="h-10 w-auto" priority />
+              <Image src="/logo.png" alt="CMPD" width={1132} height={392} className="h-8 w-auto" priority />
             </Link>
             <div className="hidden md:flex items-center gap-8">
               <a href="#how" className="text-sm font-medium text-neutral-400 hover:text-neutral-50 transition-colors">How it works</a>
@@ -344,7 +344,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <Link href="/" className="flex items-center">
-              <Image src="/logo.png" alt="CMPD" width={100} height={32} className="h-8 w-auto" />
+              <Image src="/logo.png" alt="CMPD" width={1132} height={392} className="h-7 w-auto" />
             </Link>
             <p className="text-neutral-500 text-xs max-w-md text-center leading-relaxed">
               CMPD programs are for general fitness and are not medical advice. If you have an injury or medical

@@ -88,7 +88,7 @@ export default function QuizPage() {
       <nav className="border-b border-neutral-800">
         <div className="max-w-3xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center">
-            <Image src="/logo.png" alt="CMPD" width={110} height={36} className="h-9 w-auto" priority />
+            <Image src="/logo.png" alt="CMPD" width={1132} height={392} className="h-8 w-auto" priority />
           </Link>
           <Link href="/#programs" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
             Browse all programs
