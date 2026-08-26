@@ -3,61 +3,17 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { programs, SIGNUP_URL } from './programs';
 
 // ─────────────────────────────────────────────────────────────────────────
 // PLACEHOLDER CONTENT — swap for real details before promoting:
-//   • programs: real injury programs, durations, prices, what's included
+//   • programs: real injury programs, durations, prices (in ./programs.ts)
 //   • the credential line in the "Why it works" section (Eddy's actual
 //     qualification — do not overstate)
 //   • testimonials (real recovery stories once you have them)
 // The purchase buttons currently point at the app signup as an interim
 // target; they become per-program Stripe Checkout links in the Stripe phase.
 // ─────────────────────────────────────────────────────────────────────────
-
-const programs = [
-  {
-    area: 'Shoulder',
-    name: 'Shoulder Rebuild',
-    weeks: 8,
-    price: 49,
-    blurb: 'Restore pain-free overhead strength after impingement, rotator-cuff strain, or instability.',
-  },
-  {
-    area: 'Lower Back',
-    name: 'Lower Back Reset',
-    weeks: 8,
-    price: 49,
-    blurb: 'Build a resilient spine and train around disc, SI-joint, and general lower-back pain.',
-  },
-  {
-    area: 'Knee',
-    name: 'Knee Recovery',
-    weeks: 10,
-    price: 59,
-    blurb: 'Rebuild strength and confidence after ligament, meniscus, or patellar issues.',
-  },
-  {
-    area: 'Hip',
-    name: 'Hip & Glute Rehab',
-    weeks: 8,
-    price: 49,
-    blurb: 'Address hip pain and imbalance, and rebuild strong, stable hips and glutes.',
-  },
-  {
-    area: 'Neck & Upper Back',
-    name: 'Neck & Posture',
-    weeks: 6,
-    price: 39,
-    blurb: 'Relieve neck and upper-back tension and build posture that holds up all day.',
-  },
-  {
-    area: 'Full Body',
-    name: 'Return to Training',
-    weeks: 12,
-    price: 69,
-    blurb: 'A progressive rebuild for coming back to full training after a longer layoff.',
-  },
-];
 
 const steps = [
   {
@@ -102,8 +58,6 @@ const testimonials = [
   },
 ];
 
-const SIGNUP_URL = 'https://app.cmpdcollective.com/signup';
-
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-50">
@@ -126,12 +80,12 @@ export default function LandingPage() {
               >
                 Sign In
               </a>
-              <a
-                href="#programs"
+              <Link
+                href="/quiz"
                 className="px-5 py-2 text-sm font-medium rounded-md bg-accent text-neutral-950 hover:bg-accent-light transition-colors"
               >
                 Find your program
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -176,12 +130,12 @@ export default function LandingPage() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
             >
-              <a
-                href="#programs"
+              <Link
+                href="/quiz"
                 className="px-8 py-3 bg-accent hover:bg-accent-light text-neutral-950 font-semibold rounded-md transition-colors glow-sm"
               >
                 Find your program
-              </a>
+              </Link>
               <a
                 href="#how"
                 className="px-8 py-3 border border-neutral-700 text-neutral-50 hover:border-accent hover:bg-neutral-900 font-medium rounded-md transition-all"
@@ -302,7 +256,7 @@ export default function LandingPage() {
           </div>
 
           <p className="text-center text-neutral-500 text-sm mt-12">
-            Not sure which one? <a href="#how" className="text-accent hover:underline">Answer a few questions</a> and we&apos;ll match you.
+            Not sure which one? <Link href="/quiz" className="text-accent hover:underline">Answer a few questions</Link> and we&apos;ll match you.
           </p>
         </div>
       </section>
@@ -382,12 +336,12 @@ export default function LandingPage() {
             <p className="mt-6 text-lg text-neutral-400">
               Find the program for your injury and start rebuilding today.
             </p>
-            <a
-              href="#programs"
+            <Link
+              href="/quiz"
               className="mt-10 inline-block px-8 py-4 bg-accent hover:bg-accent-light text-neutral-950 font-bold text-lg rounded-md transition-colors glow"
             >
               Find your program
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>
