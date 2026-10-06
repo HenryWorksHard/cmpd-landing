@@ -38,16 +38,16 @@ const questions: Question[] = [
     id: 'duration',
     question: 'How long has it been an issue?',
     options: [
-      { label: 'It is not — I just want it strong', value: 'none' },
+      { label: 'It is not. I just want it strong', value: 'none' },
       { label: 'It niggles now and then', value: 'recurring' },
-      { label: 'A while — months or more', value: 'chronic' },
+      { label: 'Months or more', value: 'chronic' },
       { label: 'Since an injury, surgery or a procedure', value: 'injury' },
     ],
   },
   {
     id: 'cleared',
     question: 'Have you been cleared to train?',
-    help: 'If you’re unsure, we’ll still show your match — just check with a professional first.',
+    help: 'If you are not sure we will still show your match. Check with a professional first.',
     options: [
       { label: 'Yes', value: 'yes' },
       { label: 'Not sure', value: 'unsure' },
@@ -184,7 +184,7 @@ export default function QuizPage() {
                     <p className="mt-2 text-sm leading-relaxed text-neutral-400">
                       {answers.duration === 'injury'
                         ? 'You have put an injury, surgery or a procedure behind it. A program off the shelf cannot know what you can load yet.'
-                        : 'Nobody has cleared you to train yet. Get that first — and if there is an injury behind it, we should talk before you start anything.'}
+                        : 'Nobody has cleared you to train yet. Get that first. If there is an injury behind it, we should talk before you start anything.'}
                     </p>
                     <Link
                       href={CUSTOM_URL}

@@ -2,7 +2,7 @@
 //
 // This is the clinical intake, taken verbatim from the practice's own form: it
 // is read before the call, so it is worth more than a contact form would be.
-// Five sections, and the questions are the questions — do not trim them to make
+// Five sections, and the questions are the questions. Do not trim them to make
 // the page shorter.
 //
 // Everything downstream is driven from this file. The page renders it, the API
@@ -30,7 +30,7 @@ export type Field =
   | (Base & { type: "choice"; options: string[] })
   /** Any number of answers. */
   | (Base & { type: "multi"; options: string[] })
-  /** A row of numbers, e.g. a 0–10 pain scale or 0–7 days a week. */
+  /** A row of numbers, e.g. a 0 to 10 pain scale or 0 to 7 days a week. */
   | (Base & { type: "scale"; min: number; max: number; minLabel?: string; maxLabel?: string });
 
 export type Section = { n: string; title: string; note?: string; fields: Field[] };
@@ -82,15 +82,15 @@ export const INTAKE_SECTIONS: Section[] = [
         options: [
           "Lower back",
           "Neck / cervical",
-          "Shoulder — left",
-          "Shoulder — right",
-          "Shoulder — both",
-          "Knee — left",
-          "Knee — right",
-          "Knee — both",
-          "Hip or groin — left",
-          "Hip or groin — right",
-          "Hip or groin — both",
+          "Shoulder, left",
+          "Shoulder, right",
+          "Shoulder, both",
+          "Knee, left",
+          "Knee, right",
+          "Knee, both",
+          "Hip or groin, left",
+          "Hip or groin, right",
+          "Hip or groin, both",
           "Ankle / foot",
           "Other",
         ],
@@ -107,7 +107,7 @@ export const INTAKE_SECTIONS: Section[] = [
         label: "How long have you had it?",
         type: "choice",
         required: true,
-        options: ["Acute — less than 6 weeks", "Sub-acute — 6 to 12 weeks", "Chronic — more than 3 months"],
+        options: ["Less than 6 weeks", "6 to 12 weeks", "More than 3 months"],
       },
       {
         name: "onset",
@@ -321,7 +321,7 @@ export const INTAKE_SECTIONS: Section[] = [
   },
 ];
 
-/** Flat, in order — what the API route validates and formats against. */
+/** Flat, in order: what the API route validates and formats against. */
 export const INTAKE_FIELDS: Field[] = INTAKE_SECTIONS.flatMap((s) => s.fields);
 
 export type Values = Record<string, string | string[]>;

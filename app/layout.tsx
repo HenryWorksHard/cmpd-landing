@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: "CMPD | Strength programs for the areas that give you trouble",
   description:
-    "Ongoing strength programs for shoulders, backs, knees, hips and necks — four gym sessions a week, run week by week in the CMPD app. Carrying an injury? That one gets written for you.",
+    "Strength programs for shoulders, backs, knees, hips and necks. Four gym sessions a week, run in the CMPD app. Carrying an injury? That one gets written for you.",
   keywords: [
     "shoulder strengthening program",
     "lower back strengthening program",

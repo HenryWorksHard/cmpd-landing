@@ -1,12 +1,9 @@
-// The handful of facts the nav, the footer, the quiz and the intake form all
-// need to agree on.
+// The handful of facts the nav, the footer and the quiz all need to agree on.
 
 export const NAV_LINKS = [
   { href: "/#how", label: "How it works" },
   { href: "/#programs", label: "Programs" },
-  { href: "/#app", label: "In the app" },
   { href: "/custom", label: "Custom program" },
-  { href: "/#questions", label: "Questions" },
 ];
 
 export const APP_URL = "https://app.cmpdcollective.com";

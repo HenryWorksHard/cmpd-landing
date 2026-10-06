@@ -27,15 +27,15 @@ const FROM = process.env.INTAKE_FROM || "CMPD <intake@cmpdcollective.com>";
 function format(values: Values): string {
   const flags = redFlagsIn(values);
   const head = flags.length
-    ? [`SCREENING — answered YES to:`, ...flags.map((f) => `  - ${f}`), ""].join("\n")
+    ? [`SCREENING: answered YES to`, ...flags.map((f) => `  - ${f}`), ""].join("\n")
     : "";
 
   const body = INTAKE_SECTIONS.map((s) => {
     const lines = s.fields
       .filter((f) => isVisible(f, values))
-      .map((f) => `${f.label}\n  ${formatValue(values[f.name]) || "—"}`)
+      .map((f) => `${f.label}\n  ${formatValue(values[f.name]) || "(blank)"}`)
       .join("\n\n");
-    return `${s.n} — ${s.title.toUpperCase()}\n\n${lines}`;
+    return `${s.n}. ${s.title.toUpperCase()}\n\n${lines}`;
   }).join("\n\n\n");
 
   return head + body;
@@ -64,7 +64,7 @@ export async function POST(req: Request) {
 
   const flags = redFlagsIn(values);
   const who = [values.first_name, values.last_name].map((v) => formatValue(v)).join(" ").trim();
-  const subject = `Injury intake — ${who || "no name"}${flags.length ? " — SCREENING FLAG" : ""}`;
+  const subject = `Injury intake: ${who || "no name"}${flags.length ? " [SCREENING FLAG]" : ""}`;
 
   const key = process.env.RESEND_API_KEY;
   const to = process.env.INTAKE_TO;
@@ -72,7 +72,7 @@ export async function POST(req: Request) {
   if (!key || !to) {
     // Nothing is thrown away, but this is a fallback and not a destination:
     // health information does not belong in a log drain. Set the variables.
-    console.error("[cmpd-intake] NOT EMAILED — RESEND_API_KEY/INTAKE_TO unset\n" + format(values));
+    console.error("[cmpd-intake] NOT EMAILED. RESEND_API_KEY/INTAKE_TO unset\n" + format(values));
     return NextResponse.json({ ok: true, delivered: false });
   }
 
