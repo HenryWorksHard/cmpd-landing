@@ -4,6 +4,8 @@ import Nav from "./_nx/Nav";
 import HeroCard from "./_nx/HeroCard";
 import Media from "./_nx/Media";
 import Reveal from "./_nx/Reveal";
+import GrowIn from "./_nx/GrowIn";
+import Counter from "./_nx/Counter";
 import { programs } from "./programs";
 import { NAV_LINKS, LOGIN_URL, CUSTOM_URL } from "./site";
 
@@ -32,9 +34,10 @@ import { NAV_LINKS, LOGIN_URL, CUSTOM_URL } from "./site";
 //   • prices and durations live in ./programs.ts
 // ─────────────────────────────────────────────────────────────────────────────
 
-const FACTS = [
-  { v: "6 programs", s: "One per area" },
-  { v: "4 days", s: "a week, 30 to 45 minutes" },
+// `n` counts up the first time the row is seen; the rest is plain type.
+const FACTS: { n?: number; v: string; s: string }[] = [
+  { n: 6, v: "programs", s: "One per area" },
+  { n: 4, v: "days", s: "a week, 30 to 45 minutes" },
   { v: "Gym-based", s: "Barbells, machines, cables" },
   { v: "In the app", s: "Every set logged as you train" },
 ];
@@ -184,7 +187,9 @@ export default function LandingPage() {
             <div className="nx-facts">
               {FACTS.map((f) => (
                 <div key={f.v}>
-                  <b>{f.v}</b>
+                  <b>
+                    {f.n !== undefined && <Counter to={f.n} />} {f.v}
+                  </b>
                   <span>{f.s}</span>
                 </div>
               ))}
@@ -319,6 +324,7 @@ export default function LandingPage() {
               </Reveal>
             </div>
 
+            <GrowIn>
             <div className="nx-showcase">
               <Reveal from="scale">
                 <div className="nx-phone">
@@ -360,6 +366,7 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
+            </GrowIn>
           </div>
         </section>
 

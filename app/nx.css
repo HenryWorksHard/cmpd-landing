@@ -335,7 +335,9 @@
 .nx-facts > div { padding: 0 clamp(12px, 1.4vw, 20px); border-left: 1px solid rgb(255 255 255 / .18); }
 .nx-facts > div:nth-child(4n+1) { padding-left: 0; border-left: 0; }
 .nx-facts b { display: block; color: #fff; font-size: var(--t-h3); font-weight: 600; letter-spacing: -0.05em; }
-.nx-facts span { display: block; margin-top: 5px; font-size: var(--t-sm); color: rgb(255 255 255 / .6); }
+/* Direct child only: the counter inside the <b> is a span too, and a blanket
+   descendant rule turned it into a 14px grey block on its own line. */
+.nx-facts > div > span { display: block; margin-top: 5px; font-size: var(--t-sm); color: rgb(255 255 255 / .6); }
 @media (max-width: 860px) {
   .nx-facts { grid-template-columns: repeat(2, 1fr); row-gap: clamp(16px, 3vw, 24px); }
   .nx-facts > div:nth-child(4n+1) { padding-left: clamp(12px, 1.4vw, 20px); border-left: 1px solid rgb(255 255 255 / .18); }
@@ -703,3 +705,10 @@ a.nx-card:active { transform: translateY(-3px) scale(.994); transition-duration:
 .nx-flag p { margin-top: 12px; font-size: var(--t-sm); max-width: 56ch; }
 .nx-flag .nx-btn { margin-top: clamp(18px, 2.2vw, 24px); }
 @media (max-width: 480px) { .nx-flag .nx-btn { width: 100%; } }
+
+/* ---------------------------------------------------------------- grow in */
+/* Scroll-linked, set from JS. The origin is what makes it read as the block
+   coming forward rather than sliding up from a corner. */
+.nx-grow { transform-origin: 50% 50%; }
+/* Tabular figures, or a counter ticking through 1→6 shifts the words after it. */
+.nx-facts b { font-variant-numeric: tabular-nums; }
