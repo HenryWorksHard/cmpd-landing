@@ -1,503 +1,537 @@
-import Link from "next/link";
-import Image from "next/image";
-import Nav from "./_nx/Nav";
-import HeroCard from "./_nx/HeroCard";
-import Media from "./_nx/Media";
-import Reveal from "./_nx/Reveal";
-import GrowIn from "./_nx/GrowIn";
-import Counter from "./_nx/Counter";
-import { programs } from "./programs";
-import { NAV_LINKS, LOGIN_URL, CUSTOM_URL } from "./site";
+'use client';
 
-// ─────────────────────────────────────────────────────────────────────────────
+import Link from 'next/link';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { programs } from './programs';
+import { NAV_LINKS, LOGIN_URL, CUSTOM_URL } from './site';
+import Nav from './_components/Nav';
+import Media from './_components/Media';
+import Counter from './_components/Counter';
+
+// ─────────────────────────────────────────────────────────────────────────
 // Two paths, and the page exists to sort people into the right one.
 //
-//   • Ongoing strength for an area — generalisable, so it is a product. Quiz →
-//     program → the app.
-//   • An actual injury — not generalisable, so it is not a product. Intake form
-//     → Eddy reads it → a call → a program written for that person.
+//   • Ongoing strength for an area — generalisable, so it is a product.
+//     Quiz → program → the app.
+//   • An actual injury — not generalisable, so it is not a product. Intake
+//     form → Eddy reads it → a call → a program written for that person.
 //
-// ARTWORK — four slots, and that is on purpose. The four things a visitor has
-// to see are the training, the app, the coach, and one closing image.
-// Everything else here is type. Drop files into public/media and they appear:
-//   /media/hero.mp4     + /media/hero.jpg   full-bleed hero, 16:9 or wider
-//   /media/app.mp4                          vertical screen recording of the app
-//   /media/coach.jpg                        Eddy, 4:3 landscape
-//   /media/training.jpg                     closing band, wide
-// Each empty frame prints its own path on screen. Once /media/hero.mp4 exists,
-// add `priority` to the hero Media so it skips the existence check.
+// ARTWORK — four slots, and that is on purpose. Drop files into public/media
+// and they appear; each empty frame prints the path it is waiting for:
+//   /media/hero.mp4 + /media/hero.jpg   hero, wide
+//   /media/app.mp4                      vertical screen recording of the app
+//   /media/coach.jpg                    Eddy, 4:3 landscape
+//   /media/training.jpg                 closing band, wide
+// Once /media/hero.mp4 exists, add `priority` to the hero Media so it skips
+// the existence check and starts loading immediately.
 //
 // STILL PLACEHOLDER COPY — swap before promoting:
 //   • the three testimonials below (real stories)
 //   • the credential line in "Why it works" (Eddy's actual qualification —
 //     do not overstate it)
 //   • prices and durations live in ./programs.ts
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────
+
+const fadeUp = {
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-60px' },
+};
+
+const steps = [
+  {
+    n: '01',
+    title: 'Tell us about the area',
+    body: 'Three questions: which area you want strong, how long it has been an issue, and whether you have been cleared to train.',
+  },
+  {
+    n: '02',
+    title: 'We construct a best-practice program for your presentation',
+    body: 'No guesswork. The program matches the area and the point you are starting from, built on what the evidence actually supports.',
+  },
+  {
+    n: '03',
+    title: 'Train in the app',
+    body: 'Your program lands in the CMPD app. Four sessions a week, every exercise demonstrated, every set you log saved against the week before.',
+  },
+];
 
 // `n` counts up the first time the row is seen; the rest is plain type.
-const FACTS: { n?: number; v: string; s: string }[] = [
-  { n: 6, v: "programs", s: "One per area" },
-  { n: 4, v: "days", s: "a week, 30 to 45 minutes" },
-  { v: "Gym-based", s: "Barbells, machines, cables" },
-  { v: "In the app", s: "Every set logged as you train" },
+const proofPoints: { n?: number; value: string; label: string }[] = [
+  { n: 6, value: 'programs', label: 'One per area' },
+  { n: 4, value: 'days', label: 'a week, 30 to 45 minutes' },
+  { value: 'Gym-based', label: 'Barbells, machines, cables' },
+  { value: 'In the app', label: 'Every set logged as you train' },
 ];
 
-const STEPS = [
-  {
-    n: "01",
-    title: "Tell us about the area",
-    body:
-      "Three questions: which area you want strong, how long it has been an issue, and whether you have been cleared to train.",
-  },
-  {
-    n: "02",
-    title: "We construct a best-practice program for your presentation",
-    body:
-      "No guesswork. The program matches the area and the point you are starting from, built on what the evidence actually supports.",
-  },
-  {
-    n: "03",
-    title: "Train in the app",
-    body:
-      "Your program lands in the CMPD app. Four sessions a week, every exercise demonstrated, every set you log saved against the week before.",
-  },
+const appPoints = [
+  { v: 'One session', s: 'waiting for you each day', p: 'No programme to interpret and nothing to plan. The app opens on the session you are due to do.' },
+  { v: 'Every set', s: 'logged as you go', p: 'Weights and reps save while you train, so next week knows exactly what you lifted this week.' },
+  { v: 'Video', s: 'on every exercise', p: 'No guessing the movement. Each exercise is demonstrated before you put any load on it.' },
+  { v: 'Week by week', s: 'progressive by design', p: 'Load and complexity step up on a schedule, not on how you happen to feel that morning.' },
 ];
 
-const PANELS = [
+const testimonials = [
   {
-    v: "4 days",
-    s: "a week",
-    p: "Thirty to forty-five minutes a session, built to fit around a working week rather than replace it.",
+    name: 'Placeholder — real story to add',
+    role: 'Shoulder Strength',
+    text: 'Six months of a nagging shoulder and nothing helped. Eight weeks in and I am back pressing overhead without thinking about it.',
   },
   {
-    v: "Every set",
-    s: "logged as you go",
-    p: "Weights and reps save while you train, so next week knows exactly what you lifted this week.",
+    name: 'Placeholder — real story to add',
+    role: 'Lower Back Strength',
+    text: 'I was scared to deadlift again. This eased me back into it and my back feels stronger now than it did before.',
   },
   {
-    v: "Video",
-    s: "on every exercise",
-    p: "No guessing the movement. Each exercise is demonstrated before you put any load on it.",
-  },
-  {
-    v: "Week by week",
-    s: "progressive by design",
-    p: "Load and complexity step up on a schedule, not on how you happen to feel that morning.",
+    name: 'Placeholder — real story to add',
+    role: 'Knee Strength',
+    text: 'Post-op and completely lost. Having a clear session to do every day is what actually got me back training.',
   },
 ];
 
-const STORIES = [
+const faq = [
   {
-    text:
-      "Six months of a nagging shoulder and nothing helped. Eight weeks in and I am back pressing overhead without thinking about it.",
-    name: "Placeholder — real story to add",
-    role: "Shoulder Strength",
+    q: 'Is this medical advice?',
+    a: 'No. These are training programs, not treatment. If you have an injury or a medical condition, see a qualified healthcare professional and get cleared before you start.',
   },
   {
-    text:
-      "I was scared to deadlift again. This eased me back into it and my back feels stronger now than it did before.",
-    name: "Placeholder — real story to add",
-    role: "Lower Back Strength",
+    q: 'What if I have an actual injury?',
+    a: 'Then a program off the shelf is the wrong tool, however well it is written. Fill in the injury form and we will go through it on a call before anything gets programmed.',
   },
   {
-    text:
-      "Post-op and completely lost. Having a clear session to do every day is what actually got me back training.",
-    name: "Placeholder — real story to add",
-    role: "Knee Strength",
-  },
-];
-
-const FAQ = [
-  {
-    q: "Is this medical advice?",
-    a:
-      "No. These are training programs, not treatment. If you have an injury or a medical condition, see a qualified healthcare professional and get cleared before you start.",
+    q: 'What equipment do I need?',
+    a: 'A gym. These are gym programs — barbells, dumbbells, machines and cables — because loading an area properly is most of what makes it stronger, and that is hard to do in a living room.',
   },
   {
-    q: "What if I have an actual injury?",
-    a:
-      "Then a program off the shelf is the wrong tool, however well it is written. Fill in the injury form and we will go through it on a call before anything gets programmed.",
+    q: 'How long do I have access?',
+    a: 'For the length of the program. Access starts on the first Monday after you buy — the programs run in weeks, so they start at the start of one — and runs to the last training day of the final week.',
   },
   {
-    q: "What equipment do I need?",
-    a:
-      "A gym. These are gym programs — barbells, dumbbells, machines and cables — because loading an area properly is most of what makes it stronger, and that is hard to do in a living room.",
+    q: 'Do I need the app?',
+    a: 'Yes. The program runs in the CMPD app, which is where the videos, the week-by-week plan and your logged sets live. It works on a phone, a tablet or a laptop.',
   },
   {
-    q: "How long do I have access?",
-    a:
-      "For the length of the program. Access starts on the first Monday after you buy — the programs run in weeks, so they start at the start of one — and runs to the last training day of the final week.",
-  },
-  {
-    q: "Do I need the app?",
-    a:
-      "Yes. The program runs in the CMPD app, which is where the videos, the week-by-week plan and your logged sets live. It works on a phone, a tablet or a laptop.",
-  },
-  {
-    q: "What if I pick the wrong program?",
-    a:
-      "Get in touch and we will move you across. The quiz exists so this does not happen, but not everything sits neatly in one box.",
+    q: 'What if I pick the wrong program?',
+    a: 'Get in touch and we will move you across. The quiz exists so this does not happen, but not everything sits neatly in one box.',
   },
 ];
 
 export default function LandingPage() {
   return (
-    <div className="nx">
-      <Nav overHero />
+    <div className="min-h-screen bg-neutral-950 text-neutral-50">
+      <Nav />
 
-      {/* ------------------------------------------------------------- hero */}
-      {/* Sticky, and the section below rises over it as you scroll. */}
-      <section className="nx-hero">
-        <HeroCard>
+      {/* Hero */}
+      <section className="relative flex min-h-[88svh] items-center justify-center overflow-hidden pt-16 sm:min-h-screen">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(250,204,21,0.12),transparent)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:3rem_3rem] sm:bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+
+        <div className="relative mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8 lg:py-28">
+          <div className="mx-auto max-w-4xl text-center">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+              <span className="mb-7 inline-flex items-center gap-2 rounded-full border border-neutral-700 bg-neutral-900/50 px-4 py-1.5 text-xs text-neutral-300 sm:text-sm">
+                <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
+                Strength programs built around one area
+              </span>
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-[2.1rem] font-bold leading-[1.08] tracking-tight text-neutral-50 sm:text-5xl md:text-6xl lg:text-7xl"
+            >
+              Strength where you need it.{' '}
+              <span className="gradient-text">Train the weak link.</span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-neutral-400 sm:text-lg md:text-xl"
+            >
+              Ongoing strength programs for the areas that give you trouble — shoulders,
+              backs, knees, hips. Four gym sessions a week, run week by week in the CMPD app.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-9 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:gap-4"
+            >
+              <Link
+                href="/quiz"
+                className="rounded-md bg-accent px-8 py-3.5 text-center font-semibold text-neutral-950 transition-colors hover:bg-accent-light glow-sm"
+              >
+                Find your program
+              </Link>
+              {/* The individual path, deliberately at the top: someone carrying a
+                  real injury should not read the whole page to find out this is
+                  not what they need. */}
+              <Link
+                href={CUSTOM_URL}
+                className="rounded-md border border-neutral-700 px-8 py-3.5 text-center font-medium text-neutral-50 transition-all hover:border-accent hover:bg-neutral-900"
+              >
+                Injured? Get a custom program
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Proof points */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="mt-16 lg:mt-24"
+          >
+            <div className="grid grid-cols-2 gap-6 rounded-2xl border border-neutral-800 bg-neutral-900/50 p-6 backdrop-blur-sm sm:gap-8 sm:p-8 lg:grid-cols-4 lg:gap-12">
+              {proofPoints.map((p) => (
+                <div key={p.value} className="text-center">
+                  <p className="text-lg font-bold tabular-nums gradient-text sm:text-2xl">
+                    {p.n !== undefined && <Counter to={p.n} />} {p.value}
+                  </p>
+                  <p className="mt-2 text-xs text-neutral-400 sm:text-sm">{p.label}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Hero artwork */}
+      <section className="mx-auto max-w-7xl px-5 pb-4 sm:px-6 lg:px-8">
+        <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
           <Media
             src="/media/hero.mp4"
             kind="video"
             poster="/media/hero.jpg"
             label="Hero footage"
             hint="Wide, 10–20s silent loop. Training, not a stock gym shot."
+            ratio="aspect-[4/3] sm:aspect-[16/7]"
           />
-          <div className="nx-hero-scrim" />
+        </motion.div>
+      </section>
 
-          <div className="nx-hero-inner">
-            <h1 className="nx-display">
-              Strength where
-              <br />
-              you need it.
-            </h1>
+      {/* How it works */}
+      <section id="how" className="bg-neutral-900 py-20 sm:py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="mx-auto mb-12 max-w-3xl text-center sm:mb-16">
+            <span className="text-xs font-medium uppercase tracking-wider text-accent sm:text-sm">How it works</span>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-neutral-50 sm:text-4xl lg:text-5xl">
+              From sore to strong in three steps
+            </h2>
+            <p className="mt-4 text-base leading-relaxed text-neutral-400 sm:text-lg">
+              No more guessing what is worth doing. Answer three questions, get the program
+              for the area, and follow it day by day.
+            </p>
+          </motion.div>
 
-            <div className="nx-hero-row">
-              <p>
-                Ongoing strength programs for the areas that give you trouble — shoulders,
-                backs, knees, hips. Four gym sessions a week, run week by week in the CMPD
-                app.
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {steps.map((step, index) => (
+              <motion.div
+                key={step.n}
+                {...fadeUp}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="rounded-2xl border border-neutral-800 bg-neutral-950 p-6 sm:p-8"
+              >
+                <p className="text-4xl font-bold gradient-text">{step.n}</p>
+                <h3 className="mt-4 text-lg font-semibold text-neutral-50 sm:text-xl">{step.title}</h3>
+                <p className="mt-2 leading-relaxed text-neutral-400">{step.body}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* The two paths — the distinction the whole site turns on */}
+      <section className="py-20 sm:py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+            <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
+              <span className="text-xs font-medium uppercase tracking-wider text-accent sm:text-sm">Which one are you</span>
+              <h2 className="mt-4 text-3xl font-bold tracking-tight text-neutral-50 sm:text-4xl lg:text-5xl">
+                Staying strong can be generalised.{' '}
+                <span className="gradient-text">An injury cannot.</span>
+              </h2>
+            </motion.div>
+            <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.1 }}>
+              <p className="text-base leading-relaxed text-neutral-300 sm:text-lg">
+                Keeping a shoulder, a back or a knee strong is close enough to the same work
+                for most people. That is what these programs are, and you can start one today.
               </p>
-              <div className="nx-hero-cta">
-                <Link href="/quiz" className="nx-btn">
+              <p className="mt-4 leading-relaxed text-neutral-400">
+                An injury is a different question. What happened, what you can load now, what
+                has to wait — none of that comes off a shelf. Those get a program written for
+                the person, after a call, and they start with the form.
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-4">
+                <Link
+                  href={CUSTOM_URL}
+                  className="rounded-md bg-accent px-7 py-3.5 text-center font-semibold text-neutral-950 transition-colors hover:bg-accent-light"
+                >
+                  Get a custom program
+                </Link>
+                <Link
+                  href="/quiz"
+                  className="rounded-md border border-neutral-700 px-7 py-3.5 text-center font-medium text-neutral-50 transition-all hover:border-accent hover:bg-neutral-900"
+                >
                   Find your program
                 </Link>
-                {/* The individualised path, deliberately at the top: someone
-                    carrying a real injury should not have to read the whole
-                    page to find out this is not what they need. */}
-                <Link href={CUSTOM_URL} className="nx-btn nx-btn-ghost">
-                  Injured? Get a custom program
-                </Link>
               </div>
-            </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
-            <div className="nx-facts">
-              {FACTS.map((f) => (
-                <div key={f.v}>
-                  <b>
-                    {f.n !== undefined && <Counter to={f.n} />} {f.v}
-                  </b>
-                  <span>{f.s}</span>
-                </div>
+      {/* What we cover — informational only. NO prices, NO buy buttons here:
+          the quiz is the single path to a program, price and purchase. */}
+      <section id="programs" className="relative overflow-hidden py-20 sm:py-24 lg:py-32">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,rgba(250,204,21,0.08),transparent)]" />
+
+        <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="mx-auto mb-12 max-w-3xl text-center sm:mb-16">
+            <span className="text-xs font-medium uppercase tracking-wider text-accent sm:text-sm">What we cover</span>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-neutral-50 sm:text-4xl lg:text-5xl">
+              A program for the area you want strong
+            </h2>
+            <p className="mt-4 text-base text-neutral-400 sm:text-lg">
+              Six programs, one area each, for keeping it strong on an ongoing basis. The quiz
+              picks yours — and that is also where the price and the start date are.
+            </p>
+          </motion.div>
+
+          <div className="grid gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {programs.map((program, index) => (
+              <motion.div key={program.id} {...fadeUp} transition={{ duration: 0.5, delay: index * 0.08 }}>
+                <Link
+                  href="/quiz"
+                  className="flex h-full flex-col rounded-2xl border border-neutral-800 bg-neutral-900 p-6 transition-all hover:border-accent/60 hover:bg-neutral-900/60"
+                >
+                  <span className="text-xs font-medium uppercase tracking-wider text-accent">{program.area}</span>
+                  <h3 className="mt-2 text-lg font-semibold text-neutral-50 sm:text-xl">{program.name}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-neutral-400">{program.blurb}</p>
+                  <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-accent">
+                    Find your program <span aria-hidden>→</span>
+                  </span>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="mt-12 text-center sm:mt-14">
+            <Link
+              href="/quiz"
+              className="inline-block rounded-md bg-accent px-8 py-3.5 font-semibold text-neutral-950 transition-colors hover:bg-accent-light glow-sm"
+            >
+              Find your program
+            </Link>
+            <p className="mt-4 text-sm text-neutral-500">Takes about a minute. Three questions.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* In the app */}
+      <section id="app" className="bg-neutral-900 py-20 sm:py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="mx-auto mb-12 max-w-3xl text-center sm:mb-16">
+            <span className="text-xs font-medium uppercase tracking-wider text-accent sm:text-sm">In the app</span>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-neutral-50 sm:text-4xl lg:text-5xl">
+              The program runs itself
+            </h2>
+            <p className="mt-4 text-base text-neutral-400 sm:text-lg">
+              Open the app, do the session in front of you, log the sets. The week, the order
+              and the progression are already decided.
+            </p>
+          </motion.div>
+
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,320px)_1fr] lg:gap-14">
+            <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="mx-auto w-full max-w-[280px] lg:max-w-none">
+              <Media
+                src="/media/app.mp4"
+                kind="video"
+                ratio="aspect-[9/16]"
+                label="App screen recording"
+                hint="Vertical 9:16. A session being logged, 10–15s."
+                className="shadow-[0_0_60px_-20px_rgba(250,204,21,0.25)]"
+              />
+            </motion.div>
+
+            <div className="grid gap-5 sm:grid-cols-2 sm:gap-6">
+              {appPoints.map((p, index) => (
+                <motion.div
+                  key={p.v}
+                  {...fadeUp}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  className="rounded-2xl border border-neutral-800 bg-neutral-950 p-6"
+                >
+                  <p className="text-xl font-bold text-neutral-50 sm:text-2xl">{p.v}</p>
+                  <p className="mt-1 text-sm text-accent">{p.s}</p>
+                  <p className="mt-4 text-sm leading-relaxed text-neutral-400">{p.p}</p>
+                </motion.div>
               ))}
             </div>
           </div>
-        </HeroCard>
+        </div>
       </section>
 
-      <div className="nx-over">
-        {/* --------------------------------------------------- how it works */}
-        <section id="how" className="nx-section nx-wrap">
-          <div className="nx-split nx-split-head" style={{ marginBottom: "clamp(20px, 2.4vw, 32px)" }}>
-            <Reveal from="left">
-              <span className="nx-eyebrow">How it works</span>
-              <h2 className="nx-h2 nx-head">
-                Three steps,
-                <br />
-                then you train.
-              </h2>
-            </Reveal>
-            <Reveal delay={120}>
-              <p className="nx-lead">
-                No more guessing what is worth doing. Answer three questions, get the
-                program for the area, and follow it day by day.
-              </p>
-            </Reveal>
-          </div>
-
-          <ol className="nx-steps">
-            {STEPS.map((s, i) => (
-              <Reveal key={s.n} as="li" from="left" delay={i * 110} className="nx-step">
-                <div className="nx-step-head">
-                  <span className="nx-step-n">{s.n}</span>
-                  <h3 className="nx-step-title">{s.title}</h3>
-                  <p className="nx-step-body">{s.body}</p>
-                </div>
-              </Reveal>
-            ))}
-          </ol>
-        </section>
-
-        {/* --------------------------------------------------- the two paths */}
-        {/* The distinction the whole site turns on, said plainly and early. */}
-        <section className="nx-section nx-wrap">
-          <div className="nx-split">
-            <Reveal from="left">
-              <span className="nx-eyebrow">Which one are you</span>
-              <h2 className="nx-h2 nx-head">
-                Staying strong can be
-                <br />
-                generalised. An injury
-                <br />
-                cannot.
-              </h2>
-            </Reveal>
-            <Reveal from="right" delay={100}>
-              <p className="nx-lead">
-                Keeping a shoulder, a back or a knee strong is close enough to the same
-                work for most people. That is what these programs are, and you can start
-                one today.
-              </p>
-              <p className="nx-note" style={{ marginTop: "clamp(14px, 1.6vw, 20px)" }}>
-                An injury is a different question. What happened, what you can load now,
-                what has to wait — none of that comes off a shelf. Those get a program
-                written for the person, after a call, and they start with the form.
-              </p>
-              <div className="nx-cta-row">
-                <Link href={CUSTOM_URL} className="nx-btn">
-                  Get a custom program
-                </Link>
-                <Link href="/quiz" className="nx-btn nx-btn-ghost">
-                  Find your program
-                </Link>
-              </div>
-            </Reveal>
-          </div>
-        </section>
-
-        {/* ----------------------------------------------------- programs */}
-        {/* Informational only. No prices and no buy buttons here: the quiz is
-            the single path to a program, a price and a purchase. */}
-        <section id="programs" className="nx-section nx-wrap">
-          <div className="nx-split nx-split-head" style={{ marginBottom: "clamp(20px, 2.4vw, 32px)" }}>
-            <Reveal from="left">
-              <span className="nx-eyebrow">What we cover</span>
-              <h2 className="nx-h2 nx-head">A program for the area you want strong.</h2>
-            </Reveal>
-            <Reveal delay={120}>
-              <p className="nx-lead">
-                Six programs, one area each, for keeping it strong on an ongoing basis. The
-                quiz picks yours — and that is also where the price and the start date are.
-              </p>
-            </Reveal>
-          </div>
-
-          <div className="nx-cards">
-            {programs.map((p, i) => (
-              <Reveal key={p.id} delay={i * 70}>
-                <Link href="/quiz" className="nx-card">
-                  <span className="nx-card-k">{p.area}</span>
-                  <h3>{p.name}</h3>
-                  <p>{p.blurb}</p>
-                  <span className="nx-card-go">Find your program</span>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal>
-            <div className="nx-cta-row">
-              <Link href="/quiz" className="nx-btn">
-                Find your program
-              </Link>
-              <span className="nx-note">Takes about a minute. Three questions.</span>
-            </div>
-          </Reveal>
-        </section>
-
-        {/* ------------------------------------------------------ in the app */}
-        <section id="app" className="nx-section nx-dark">
-          <div className="nx-wrap">
-            <div className="nx-split nx-split-head" style={{ marginBottom: "clamp(20px, 2.4vw, 32px)" }}>
-              <Reveal from="left">
-                <span className="nx-eyebrow">In the app</span>
-                <h2 className="nx-h2 nx-head">The program runs itself.</h2>
-              </Reveal>
-              <Reveal delay={120}>
-                <p className="nx-lead">
-                  Open the app, do the session in front of you, log the sets. The week, the
-                  order and the progression are already decided.
-                </p>
-              </Reveal>
-            </div>
-
-            <GrowIn>
-            <div className="nx-showcase">
-              <Reveal from="scale">
-                <div className="nx-phone">
-                  <div className="nx-phone-stage">
-                    <div className="nx-phone-screen">
-                      <Media
-                        src="/media/app.mp4"
-                        kind="video"
-                        ratio="nx-9x16"
-                        label="App screen recording"
-                        hint="Vertical 9:16. A session being logged, 10–15s."
-                      />
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
-
-              <div className="nx-showcase-right">
-                <Reveal delay={80}>
-                  <div className="nx-panel nx-lift">
-                    <b>One session</b>
-                    <span>waiting for you each day</span>
-                    <p>
-                      No programme to interpret and nothing to plan. The app opens on the
-                      session you are due to do.
-                    </p>
-                  </div>
-                </Reveal>
-                <div className="nx-panels">
-                  {PANELS.map((p, i) => (
-                    <Reveal key={p.v} delay={140 + i * 70}>
-                      <div className="nx-panel nx-lift">
-                        <b>{p.v}</b>
-                        <span>{p.s}</span>
-                        <p>{p.p}</p>
-                      </div>
-                    </Reveal>
-                  ))}
-                </div>
-              </div>
-            </div>
-            </GrowIn>
-          </div>
-        </section>
-
-        {/* ----------------------------------------------------- why it works */}
-        <section className="nx-section nx-wrap">
-          <div className="nx-split">
-            <Reveal from="left">
+      {/* Why it works / credibility */}
+      <section className="py-20 sm:py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+            <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
               <Media
                 src="/media/coach.jpg"
-                ratio="nx-4x3"
+                ratio="aspect-[4/3]"
                 label="Coach portrait"
                 hint="Eddy, coaching. 4:3 landscape."
               />
-            </Reveal>
-            <Reveal from="right" delay={100}>
-              <span className="nx-eyebrow">Why it works</span>
-              <h2 className="nx-h2 nx-head">
-                Built by a coach who trains through injuries.
+            </motion.div>
+            <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.1 }}>
+              <span className="text-xs font-medium uppercase tracking-wider text-accent sm:text-sm">Why it works</span>
+              <h2 className="mt-4 text-3xl font-bold tracking-tight text-neutral-50 sm:text-4xl lg:text-5xl">
+                Built by a coach who trains through injuries
               </h2>
-              <p className="nx-lead" style={{ marginTop: "clamp(18px, 2vw, 26px)" }}>
-                Each program is built around one area — what to load, how to progress it,
-                and what to keep working while you do.
+              <p className="mt-6 text-base leading-relaxed text-neutral-300 sm:text-lg">
+                Each program is built around one area — what to load, how to progress it, and
+                what to keep working while you do.
               </p>
               {/* TODO: Eddy's real qualification / credential goes here. Keep it
                   factual — this is the line people will check. */}
-              <p className="nx-note" style={{ marginTop: "clamp(14px, 1.6vw, 20px)" }}>
-                The programs train the whole body and work around the area rather than
-                ignoring it, so you keep making progress everywhere else while it builds.
+              <p className="mt-4 leading-relaxed text-neutral-400">
+                The programs train the whole body and work around the area rather than ignoring
+                it, so you keep making progress everywhere else while it builds.
               </p>
-            </Reveal>
+            </motion.div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* --------------------------------------------------------- stories */}
-        <section id="stories" className="nx-section nx-wrap">
-          <Reveal>
-            <span className="nx-eyebrow">Stories</span>
-            <h2 className="nx-h2 nx-head" style={{ marginBottom: "clamp(20px, 2.4vw, 32px)" }}>
-              Back to training.
+      {/* Stories */}
+      <section id="stories" className="bg-neutral-900 py-20 sm:py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="mx-auto mb-12 max-w-3xl text-center sm:mb-16">
+            <span className="text-xs font-medium uppercase tracking-wider text-accent sm:text-sm">Stories</span>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-neutral-50 sm:text-4xl lg:text-5xl">
+              Back to training, stronger
             </h2>
-          </Reveal>
+          </motion.div>
 
-          <div className="nx-cards">
-            {STORIES.map((s, i) => (
-              <Reveal key={s.role} delay={i * 90}>
-                <div className="nx-card nx-card-quote">
-                  <p>{s.text}</p>
-                  <div className="nx-card-by">
-                    <b>{s.name}</b>
-                    <span>{s.role}</span>
-                  </div>
+          <div className="grid gap-5 sm:gap-6 md:grid-cols-3">
+            {testimonials.map((t, index) => (
+              <motion.div
+                key={index}
+                {...fadeUp}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="rounded-2xl border border-neutral-800 bg-neutral-950 p-6 transition-colors hover:border-neutral-700"
+              >
+                <p className="leading-relaxed text-neutral-300">&ldquo;{t.text}&rdquo;</p>
+                <div className="mt-6 border-t border-neutral-800 pt-6">
+                  <p className="font-semibold text-neutral-50">{t.name}</p>
+                  <p className="text-sm text-neutral-500">{t.role}</p>
                 </div>
-              </Reveal>
+              </motion.div>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ------------------------------------------------------- questions */}
-        <section id="questions" className="nx-section nx-wrap">
-          <div className="nx-split nx-split-head" style={{ marginBottom: "clamp(20px, 2.4vw, 32px)" }}>
-            <Reveal from="left">
-              <span className="nx-eyebrow">Questions</span>
-              <h2 className="nx-h2 nx-head">Before you start.</h2>
-            </Reveal>
-          </div>
+      {/* Questions */}
+      <section id="questions" className="py-20 sm:py-24 lg:py-32">
+        <div className="mx-auto max-w-4xl px-5 sm:px-6 lg:px-8">
+          <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="mb-10 text-center sm:mb-14">
+            <span className="text-xs font-medium uppercase tracking-wider text-accent sm:text-sm">Questions</span>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-neutral-50 sm:text-4xl lg:text-5xl">
+              Before you start
+            </h2>
+          </motion.div>
 
-          <div className="nx-faq">
-            {FAQ.map((f, i) => (
-              <Reveal key={f.q} delay={i * 60}>
-                <details>
-                  <summary>{f.q}</summary>
-                  <p>{f.a}</p>
-                </details>
-              </Reveal>
+          <div className="divide-y divide-neutral-800 border-y border-neutral-800">
+            {faq.map((f) => (
+              <details key={f.q} className="group">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-base font-semibold text-neutral-50 sm:text-lg">
+                  {f.q}
+                  <span className="shrink-0 text-2xl font-light text-accent transition-transform group-open:rotate-45" aria-hidden>
+                    +
+                  </span>
+                </summary>
+                <p className="pb-5 leading-relaxed text-neutral-400">{f.a}</p>
+              </details>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ------------------------------------------------- closing + footer */}
-        <section className="nx-dark">
-          <div className="nx-wrap nx-section" style={{ paddingBottom: 0 }}>
-            <Reveal from="scale">
-              <Media
-                src="/media/training.jpg"
-                ratio="nx-5x3"
-                className="nx-media-cap"
-                label="Closing image"
-                hint="Wide. Someone mid-session, shot dark."
-              />
-            </Reveal>
-            <Reveal>
-              <h2 className="nx-display" style={{ margin: "clamp(26px, 3vw, 44px) 0 26px" }}>
-                Start the work.
-              </h2>
-              <div className="nx-hero-cta">
-                <Link href="/quiz" className="nx-btn">
-                  Find your program
-                </Link>
-                <Link href={CUSTOM_URL} className="nx-btn nx-btn-ghost">
-                  Injured? Get a custom program
-                </Link>
-              </div>
-            </Reveal>
-          </div>
+      {/* Final CTA */}
+      <section className="relative overflow-hidden py-20 sm:py-24 lg:py-32">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_100%,rgba(250,204,21,0.15),transparent)]" />
 
-          <footer className="nx-wrap nx-foot">
-            <div className="nx-foot-top">
-              <Link href="/" className="nx-brand" aria-label="CMPD, home" style={{ flex: "0 0 auto" }}>
-                <Image src="/logo.png" alt="CMPD" width={1132} height={392} sizes="130px" />
+        <div className="relative mx-auto max-w-5xl px-5 sm:px-6 lg:px-8">
+          <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
+            <Media
+              src="/media/training.jpg"
+              ratio="aspect-[4/3] sm:aspect-[16/7]"
+              label="Closing image"
+              hint="Wide. Someone mid-session, shot dark."
+            />
+          </motion.div>
+
+          <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.1 }} className="mt-12 text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-neutral-50 sm:text-4xl lg:text-5xl">
+              Stop waiting for it to settle
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl text-base text-neutral-400 sm:text-lg">
+              Find the program for your area, or send through the injury form and we will talk.
+            </p>
+            <div className="mt-9 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:gap-4">
+              <Link
+                href="/quiz"
+                className="rounded-md bg-accent px-8 py-4 text-center text-lg font-bold text-neutral-950 transition-colors hover:bg-accent-light glow"
+              >
+                Find your program
               </Link>
-              <div className="nx-foot-links">
-                {NAV_LINKS.map((l) => (
-                  <Link key={l.href} href={l.href}>
-                    {l.label}
-                  </Link>
-                ))}
-                <Link href="/quiz">Find your program</Link>
-                <a href={LOGIN_URL}>Sign in</a>
-              </div>
+              <Link
+                href={CUSTOM_URL}
+                className="rounded-md border border-neutral-700 px-8 py-4 text-center text-lg font-medium text-neutral-50 transition-all hover:border-accent hover:bg-neutral-900"
+              >
+                Injured? Get a custom program
+              </Link>
             </div>
-            <div className="nx-foot-bottom">
-              <p>
-                CMPD programs are for general fitness and are not medical advice. If you
-                have an injury or a medical condition, consult a qualified healthcare
-                professional and get cleared before starting any program.
-              </p>
-              <span style={{ marginLeft: "auto" }}>© {new Date().getFullYear()} CMPD</span>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-neutral-800 bg-neutral-950">
+        <div className="mx-auto max-w-7xl px-5 py-12 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
+            <Link href="/" className="flex items-center" aria-label="CMPD, home">
+              <Image src="/logo.png" alt="CMPD" width={1132} height={392} sizes="130px" className="h-7 w-auto" />
+            </Link>
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm">
+              {NAV_LINKS.map((l) => (
+                <Link key={l.href} href={l.href} className="text-neutral-400 transition-colors hover:text-neutral-50">
+                  {l.label}
+                </Link>
+              ))}
+              <a href={LOGIN_URL} className="text-neutral-400 transition-colors hover:text-neutral-50">
+                Sign In
+              </a>
             </div>
-          </footer>
-        </section>
-      </div>
+          </div>
+
+          <div className="mt-10 flex flex-col items-center gap-4 border-t border-neutral-800 pt-8 text-center md:flex-row md:justify-between md:text-left">
+            <p className="max-w-xl text-xs leading-relaxed text-neutral-500">
+              CMPD programs are for general fitness and are not medical advice. If you have an
+              injury or medical condition, consult a qualified healthcare professional and get
+              cleared before starting any program.
+            </p>
+            <p className="text-sm text-neutral-500">© {new Date().getFullYear()} CMPD. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

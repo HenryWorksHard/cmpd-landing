@@ -1,14 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Sora } from "next/font/google";
 import "./globals.css";
-import "./nx.css";
 
-// One typeface, two weights. 500 for everything and 600 for headings — the
-// design has no bold anywhere, and that single restraint is most of why it
-// reads the way it does.
-const inter = Inter({
+// Inter powers the body (clean, polished); Sora powers the headings to
+// match the CMPD app's industrial heading font. Sora is exposed as a CSS
+// variable and applied to h1/h2/.font-heading in globals.css.
+const inter = Inter({ subsets: ["latin"] });
+const sora = Sora({
   subsets: ["latin"],
-  weight: ["500", "600"],
+  weight: ["600", "700", "800"],
+  variable: "--font-sora",
   display: "swap",
 });
 
@@ -38,17 +39,22 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  // The hero is near-black and the page is paper; the browser chrome should
-  // follow the page rather than guess.
-  themeColor: "#f5f5f5",
+  themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
+  // The page is true black; the browser chrome should follow it rather than
+  // guess, and a phone should be able to zoom.
+  maximumScale: 5,
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} ${sora.variable}`}>{children}</body>
     </html>
   );
 }
