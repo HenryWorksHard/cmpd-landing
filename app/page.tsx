@@ -8,6 +8,7 @@ import { NAV_LINKS, LOGIN_URL, CUSTOM_URL } from './site';
 import Nav from './_components/Nav';
 import Media from './_components/Media';
 import Counter from './_components/Counter';
+import { useMediaExists } from './_components/useMediaExists';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Two paths, and the page exists to sort people into the right one.
@@ -17,8 +18,10 @@ import Counter from './_components/Counter';
 //   • An actual injury — not generalisable, so it is not a product. Intake
 //     form → Eddy reads it → a call → a program written for that person.
 //
-// ARTWORK — four slots, and that is on purpose. Drop files into public/media
-// and they appear; each empty frame prints the path it is waiting for:
+// ARTWORK — four slots, and every one of them is silent until its file
+// exists. Nothing is drawn, nothing is reserved, and the sections that change
+// shape without their artwork lay themselves out the other way. Drop a file
+// into public/media and it appears, with nothing to deploy beyond the commit:
 //   /media/hero.mp4 + /media/hero.jpg   hero, wide
 //   /media/app.mp4                      vertical screen recording of the app
 //   /media/coach.jpg                    Eddy, 4:3 landscape
@@ -26,11 +29,9 @@ import Counter from './_components/Counter';
 // Once /media/hero.mp4 exists, add `priority` to the hero Media so it skips
 // the existence check and starts loading immediately.
 //
-// STILL PLACEHOLDER COPY — swap before promoting:
-//   • the three testimonials below (real stories)
-//   • the credential line in "Why it works" (Eddy's actual qualification —
-//     do not overstate it)
-//   • prices and durations live in ./programs.ts
+// Nothing on this page is placeholder copy. The one thing still to add is
+// Eddy's qualification in "Why it works" — see the note there — and the
+// prices and durations in ./programs.ts.
 // ─────────────────────────────────────────────────────────────────────────
 
 const fadeUp = {
@@ -72,24 +73,6 @@ const appPoints = [
   { v: 'Week by week', s: 'progressive by design', p: 'Load and complexity step up on a schedule, not on how you happen to feel that morning.' },
 ];
 
-const testimonials = [
-  {
-    name: 'Placeholder — real story to add',
-    role: 'Shoulder Strength',
-    text: 'Six months of a nagging shoulder and nothing helped. Eight weeks in and I am back pressing overhead without thinking about it.',
-  },
-  {
-    name: 'Placeholder — real story to add',
-    role: 'Lower Back Strength',
-    text: 'I was scared to deadlift again. This eased me back into it and my back feels stronger now than it did before.',
-  },
-  {
-    name: 'Placeholder — real story to add',
-    role: 'Knee Strength',
-    text: 'Post-op and completely lost. Having a clear session to do every day is what actually got me back training.',
-  },
-];
-
 const faq = [
   {
     q: 'Is this medical advice?',
@@ -118,6 +101,13 @@ const faq = [
 ];
 
 export default function LandingPage() {
+  // Read here rather than inside each slot, because these sections lay
+  // themselves out differently with and without their artwork.
+  const heroArt = useMediaExists('/media/hero.mp4');
+  const appArt = useMediaExists('/media/app.mp4');
+  const coachArt = useMediaExists('/media/coach.jpg');
+  const closingArt = useMediaExists('/media/training.jpg');
+
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-50">
       <Nav />
@@ -201,19 +191,20 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Hero artwork */}
-      <section className="mx-auto max-w-7xl px-5 pb-4 sm:px-6 lg:px-8">
-        <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
-          <Media
-            src="/media/hero.mp4"
-            kind="video"
-            poster="/media/hero.jpg"
-            label="Hero footage"
-            hint="Wide, 10–20s silent loop. Training, not a stock gym shot."
-            ratio="aspect-[4/3] sm:aspect-[16/7]"
-          />
-        </motion.div>
-      </section>
+      {/* Hero artwork — renders nothing at all until /media/hero.mp4 exists */}
+      {heroArt && (
+        <section className="mx-auto max-w-7xl px-5 pb-4 sm:px-6 lg:px-8">
+          <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
+            <Media
+              src="/media/hero.mp4"
+              kind="video"
+              poster="/media/hero.jpg"
+              label="Training at CMPD"
+              ratio="aspect-[4/3] sm:aspect-[16/7]"
+            />
+          </motion.div>
+        </section>
+      )}
 
       {/* How it works */}
       <section id="how" className="bg-neutral-900 py-20 sm:py-24 lg:py-32">
@@ -347,19 +338,24 @@ export default function LandingPage() {
             </p>
           </motion.div>
 
-          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,320px)_1fr] lg:gap-14">
-            <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="mx-auto w-full max-w-[280px] lg:max-w-none">
-              <Media
-                src="/media/app.mp4"
-                kind="video"
-                ratio="aspect-[9/16]"
-                label="App screen recording"
-                hint="Vertical 9:16. A session being logged, 10–15s."
-                className="shadow-[0_0_60px_-20px_rgba(250,204,21,0.25)]"
-              />
-            </motion.div>
+          <div
+            className={`grid items-center gap-10 lg:gap-14 ${
+              appArt ? "lg:grid-cols-[minmax(0,320px)_1fr]" : ""
+            }`}
+          >
+            {appArt && (
+              <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="mx-auto w-full max-w-[280px] lg:max-w-none">
+                <Media
+                  src="/media/app.mp4"
+                  kind="video"
+                  ratio="aspect-[9/16]"
+                  label="The CMPD app"
+                  className="shadow-[0_0_60px_-20px_rgba(250,204,21,0.25)]"
+                />
+              </motion.div>
+            )}
 
-            <div className="grid gap-5 sm:grid-cols-2 sm:gap-6">
+            <div className={`grid gap-5 sm:gap-6 ${appArt ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-4"}`}>
               {appPoints.map((p, index) => (
                 <motion.div
                   key={p.v}
@@ -380,15 +376,12 @@ export default function LandingPage() {
       {/* Why it works / credibility */}
       <section className="py-20 sm:py-24 lg:py-32">
         <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-            <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
-              <Media
-                src="/media/coach.jpg"
-                ratio="aspect-[4/3]"
-                label="Coach portrait"
-                hint="Eddy, coaching. 4:3 landscape."
-              />
-            </motion.div>
+          <div className={`grid items-center gap-10 lg:gap-16 ${coachArt ? "lg:grid-cols-2" : "mx-auto max-w-3xl text-center"}`}>
+            {coachArt && (
+              <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
+                <Media src="/media/coach.jpg" ratio="aspect-[4/3]" label="Eddy, coaching" />
+              </motion.div>
+            )}
             <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.1 }}>
               <span className="text-xs font-medium uppercase tracking-wider text-accent sm:text-sm">Why it works</span>
               <h2 className="mt-4 text-3xl font-bold tracking-tight text-neutral-50 sm:text-4xl lg:text-5xl">
@@ -409,37 +402,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Stories */}
-      <section id="stories" className="bg-neutral-900 py-20 sm:py-24 lg:py-32">
-        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-          <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="mx-auto mb-12 max-w-3xl text-center sm:mb-16">
-            <span className="text-xs font-medium uppercase tracking-wider text-accent sm:text-sm">Stories</span>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-neutral-50 sm:text-4xl lg:text-5xl">
-              Back to training, stronger
-            </h2>
-          </motion.div>
-
-          <div className="grid gap-5 sm:gap-6 md:grid-cols-3">
-            {testimonials.map((t, index) => (
-              <motion.div
-                key={index}
-                {...fadeUp}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="rounded-2xl border border-neutral-800 bg-neutral-950 p-6 transition-colors hover:border-neutral-700"
-              >
-                <p className="leading-relaxed text-neutral-300">&ldquo;{t.text}&rdquo;</p>
-                <div className="mt-6 border-t border-neutral-800 pt-6">
-                  <p className="font-semibold text-neutral-50">{t.name}</p>
-                  <p className="text-sm text-neutral-500">{t.role}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Questions */}
-      <section id="questions" className="py-20 sm:py-24 lg:py-32">
+      <section id="questions" className="bg-neutral-900 py-20 sm:py-24 lg:py-32">
         <div className="mx-auto max-w-4xl px-5 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="mb-10 text-center sm:mb-14">
             <span className="text-xs font-medium uppercase tracking-wider text-accent sm:text-sm">Questions</span>
@@ -469,16 +433,17 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_100%,rgba(250,204,21,0.15),transparent)]" />
 
         <div className="relative mx-auto max-w-5xl px-5 sm:px-6 lg:px-8">
-          <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
-            <Media
-              src="/media/training.jpg"
-              ratio="aspect-[4/3] sm:aspect-[16/7]"
-              label="Closing image"
-              hint="Wide. Someone mid-session, shot dark."
-            />
-          </motion.div>
+          {closingArt && (
+            <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
+              <Media src="/media/training.jpg" ratio="aspect-[4/3] sm:aspect-[16/7]" label="Training at CMPD" />
+            </motion.div>
+          )}
 
-          <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.1 }} className="mt-12 text-center">
+          <motion.div
+            {...fadeUp}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className={`text-center ${closingArt ? "mt-12" : ""}`}
+          >
             <h2 className="text-3xl font-bold tracking-tight text-neutral-50 sm:text-4xl lg:text-5xl">
               Stop waiting for it to settle
             </h2>
