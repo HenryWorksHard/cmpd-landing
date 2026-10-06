@@ -11,14 +11,13 @@ import { useEffect, useState } from "react";
  * onError, so rendering the media first leaves an invisible empty box with no
  * way to tell whether it is loading, broken, or simply not supplied yet.
  *
- * The frame names the exact path to drop the file at and the shape it should
- * be, so filling the page in is a matter of copying files into public/media
- * with no code to touch.
+ * The frame names the exact path to drop the file at, so filling the page in is
+ * a matter of copying files into public/media with no code to touch.
  */
 export default function Media({
   src,
   kind = "image",
-  ratio = "nx-16x9",
+  ratio = "aspect-video",
   label,
   hint,
   poster,
@@ -28,10 +27,9 @@ export default function Media({
   /** Where the file goes, e.g. /media/hero.mp4 */
   src: string;
   kind?: "image" | "video";
-  ratio?: "nx-16x9" | "nx-4x3" | "nx-1x1" | "nx-5x3" | "nx-9x16";
-  /** What the slot is for — shown on the placeholder. */
+  /** A Tailwind aspect class, or "" when a parent sets the height. */
+  ratio?: string;
   label: string;
-  /** What the file should look like, e.g. "9:16 vertical, 10-20s silent loop". */
   hint?: string;
   poster?: string;
   className?: string;
@@ -41,14 +39,12 @@ export default function Media({
   // Only our own files are probed. A cross-origin HEAD is refused by CORS,
   // which would report every real CDN image as missing.
   const ours = src.startsWith("/");
-  // A priority slot is one we know is filled, so it renders immediately rather
-  // than waiting a round trip to ask — that probe sits in front of the hero.
   const [there, setThere] = useState(!ours || priority);
 
   useEffect(() => {
     if (!ours || priority) return;
     let live = true;
-    // HEAD, so a large video is not downloaded twice just to find out it exists.
+    // HEAD, so a large video is not downloaded twice to find out it exists.
     fetch(src, { method: "HEAD" })
       .then((r) => {
         if (live && r.ok) setThere(true);
@@ -60,9 +56,11 @@ export default function Media({
   }, [src, ours, priority]);
 
   return (
-    <div className={`nx-media ${ratio} ${className}`}>
-      {there &&
-        (kind === "video" ? (
+    <div
+      className={`relative overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 ${ratio} ${className}`}
+    >
+      {there ? (
+        kind === "video" ? (
           <video
             src={src}
             poster={poster}
@@ -70,10 +68,10 @@ export default function Media({
             muted
             loop
             playsInline
-            // The hero is worth fetching eagerly; anything below the fold is
-            // not, and a page of autoplaying videos all preloading is what
-            // makes a site crawl on a phone.
+            // Anything below the fold preloading in full is what makes a page
+            // of autoplaying video crawl on a phone.
             preload={priority ? "auto" : "metadata"}
+            className="absolute inset-0 h-full w-full object-cover"
           />
         ) : (
           // eslint-disable-next-line @next/next/no-img-element
@@ -84,14 +82,15 @@ export default function Media({
             fetchPriority={priority ? "high" : "auto"}
             decoding="async"
             onError={() => setThere(false)}
+            className="absolute inset-0 h-full w-full object-cover"
           />
-        ))}
-      {!there && (
-        <div className="nx-ph">
+        )
+      ) : (
+        <div className="media-ph absolute inset-0 grid place-items-center p-4 text-center">
           <span>
-            <b>{label}</b>
-            <code>{src}</code>
-            {hint && <small>{hint}</small>}
+            <span className="block text-sm font-semibold text-neutral-300">{label}</span>
+            <code className="mt-1 block text-[11px] text-accent/70">{src}</code>
+            {hint && <span className="mt-1 block text-[11px] text-neutral-500">{hint}</span>}
           </span>
         </div>
       )}
