@@ -1,37 +1,54 @@
-import type { Metadata } from "next";
-import { Inter, Sora } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import "./nx.css";
 
-// Inter powers the body (clean, polished); Sora powers the headings to
-// match the CMPD app's industrial heading font. Sora is exposed as a CSS
-// variable and applied to h1/h2/.font-heading in globals.css.
-const inter = Inter({ subsets: ["latin"] });
-const sora = Sora({
+// One typeface, two weights. 500 for everything and 600 for headings — the
+// design has no bold anywhere, and that single restraint is most of why it
+// reads the way it does.
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  variable: "--font-sora",
+  weight: ["500", "600"],
   display: "swap",
 });
 
+const SITE = "https://cmpdcollective.com";
+
 export const metadata: Metadata = {
-  title: "CMPD | Fitness Management Platform for Personal Trainers",
-  description: "The all-in-one platform for fitness professionals. Build programs, manage clients, and grow your business with one simple monthly subscription.",
-  keywords: ["fitness software", "personal trainer software", "gym management", "workout builder", "client management"],
+  metadataBase: new URL(SITE),
+  title: "CMPD | Strength programs for the areas that give you trouble",
+  description:
+    "Ongoing strength programs for shoulders, backs, knees, hips and necks — four gym sessions a week, run week by week in the CMPD app. Carrying an injury? That one gets written for you.",
+  keywords: [
+    "shoulder strengthening program",
+    "lower back strengthening program",
+    "knee strengthening program",
+    "hip and glute strength",
+    "gym strength program",
+    "custom injury program",
+  ],
   openGraph: {
-    title: "CMPD | Fitness Management Platform",
-    description: "Build programs, manage clients, and grow your fitness business.",
+    title: "CMPD | Strength where you need it",
+    description:
+      "One program per area. Four gym sessions a week, 30 to 45 minutes, run in the CMPD app.",
+    url: SITE,
     type: "website",
   },
+  twitter: { card: "summary_large_image" },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = {
+  // The hero is near-black and the page is paper; the browser chrome should
+  // follow the page rather than guess.
+  themeColor: "#f5f5f5",
+  width: "device-width",
+  initialScale: 1,
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} ${sora.variable}`}>{children}</body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
