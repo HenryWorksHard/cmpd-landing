@@ -18,7 +18,7 @@ import {
 // A generalised strengthening program is the right answer for keeping an area
 // strong and the wrong answer for an actual injury, so the two are separated at
 // the top of the site: the quiz sells a program, this collects enough to talk
-// about one. Nothing is charged here — it ends in a call.
+// about one. Nothing is charged here; it ends in a call.
 //
 // The questions all live in ../intake-form.ts. This page only knows how to
 // render the field types and how to hide a question whose condition does not
@@ -31,9 +31,9 @@ const fadeUp = {
 };
 
 const steps = [
-  { n: '01', t: 'Fill this in', b: 'It is a clinical intake, not a contact form. The detail here is what makes the call useful instead of a round of twenty questions.' },
+  { n: '01', t: 'Fill this in', b: 'It is a clinical intake, not a contact form. The detail here is what makes the call useful.' },
   { n: '02', t: 'Eddy reads it', b: 'Before you speak, not during. If it is not something that should be trained around yet, you will be told that.' },
-  { n: '03', t: 'We book a call', b: 'Fifteen minutes to go through it, and then a program written for your presentation.' },
+  { n: '03', t: 'We book a call', b: 'Fifteen minutes to go through it, then a program written for your presentation.' },
 ];
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -226,9 +226,9 @@ export default function CustomPage() {
           </h1>
           <p className="mt-5 text-base leading-relaxed text-neutral-400 sm:text-lg">
             Keeping a shoulder or a knee strong is close enough to the same work for most
-            people — that is what the programs on the site are. An injury is not: it depends
-            on what happened, what you can load today, and what you cannot. That one gets
-            written for you.
+            people. That is what the programs on the site are. An injury is not. It depends on
+            what happened, what you can load today, and what you cannot. That one gets written
+            for you.
           </p>
         </motion.div>
 
@@ -246,7 +246,7 @@ export default function CustomPage() {
           <div className="mt-12 rounded-2xl border-2 border-accent bg-neutral-900 p-7 glow-sm sm:p-9">
             <h2 className="text-2xl font-bold sm:text-3xl">Sent.</h2>
             <p className="mt-4 leading-relaxed text-neutral-300">
-              Eddy reads these himself, so it will not be instant — expect to hear back within
+              Eddy reads these himself, so it will not be instant. Expect to hear back within
               a couple of days to put a time in.
             </p>
             <p className="mt-3 leading-relaxed text-neutral-400">
@@ -280,8 +280,8 @@ export default function CustomPage() {
                   You have answered yes to{' '}
                   {flags.length === 1 ? 'a screening question' : `${flags.length} screening questions`}. Those are
                   the ones that point at something a training program cannot fix and should not
-                  be worked around. Send this through by all means — but get it looked at
-                  medically first, and we will talk after that.
+                  be worked around. Send this through by all means, but get it looked at
+                  medically first and we will talk after that.
                 </p>
               </div>
             )}
