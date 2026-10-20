@@ -8,38 +8,21 @@ import {
   type Values,
 } from "../../intake-form";
 
-// Where an injury intake submission goes.
+// Hands an injury intake form to the CMPD app, which stores it and tells Eddy.
 //
-// Email is the real path and needs two environment variables in Vercel:
-//   RESEND_API_KEY  — a key on the CMPD Resend account
-//   INTAKE_TO       — the inbox that should receive them
-//   INTAKE_FROM     — optional; defaults to a verified cmpdcollective.com sender
+// This site holds no database key and no mail key. It validates, shapes the
+// answers, and posts them to app.cmpdcollective.com with a shared secret. The
+// app owns the service role key and the Resend setup already, so there is one
+// place that writes a row and one place that sends the notification.
 //
-// Until those are set the submission is still written to the server log with a
-// findable tag, so nothing a visitor types is silently dropped — but a log is
-// not an inbox, and this one carries health information. Set the variables.
+// The important property: this route only reports success when the app has
+// actually stored the submission. An earlier version accepted a form it could
+// not store and told the person they were in the queue when they were not.
 
 export const runtime = "nodejs";
 
-const FROM = process.env.INTAKE_FROM || "CMPD <intake@cmpdcollective.com>";
-
-/** Laid out the way the form asks it, so it reads top to bottom on a phone. */
-function format(values: Values): string {
-  const flags = redFlagsIn(values);
-  const head = flags.length
-    ? [`SCREENING: answered YES to`, ...flags.map((f) => `  - ${f}`), ""].join("\n")
-    : "";
-
-  const body = INTAKE_SECTIONS.map((s) => {
-    const lines = s.fields
-      .filter((f) => isVisible(f, values))
-      .map((f) => `${f.label}\n  ${formatValue(values[f.name]) || "(blank)"}`)
-      .join("\n\n");
-    return `${s.n}. ${s.title.toUpperCase()}\n\n${lines}`;
-  }).join("\n\n\n");
-
-  return head + body;
-}
+const ENDPOINT =
+  process.env.INTAKE_ENDPOINT || "https://app.cmpdcollective.com/api/intake";
 
 export async function POST(req: Request) {
   let values: Values;
@@ -62,40 +45,71 @@ export async function POST(req: Request) {
     );
   }
 
-  const flags = redFlagsIn(values);
-  const who = [values.first_name, values.last_name].map((v) => formatValue(v)).join(" ").trim();
-  const subject = `Injury intake: ${who || "no name"}${flags.length ? " [SCREENING FLAG]" : ""}`;
-
-  const key = process.env.RESEND_API_KEY;
-  const to = process.env.INTAKE_TO;
-
-  if (!key || !to) {
-    // Nothing is thrown away, but this is a fallback and not a destination:
-    // health information does not belong in a log drain. Set the variables.
-    console.error("[cmpd-intake] NOT EMAILED. RESEND_API_KEY/INTAKE_TO unset\n" + format(values));
-    return NextResponse.json({ ok: true, delivered: false });
+  const secret = process.env.INTAKE_SECRET;
+  if (!secret) {
+    // Refusing is the honest answer. Accepting a form with nowhere to put it
+    // is how the first enquiry was lost.
+    console.error("[intake] INTAKE_SECRET is not set; refusing the submission");
+    return NextResponse.json(
+      { error: "The form is not accepting submissions right now." },
+      { status: 503 },
+    );
   }
+
+  // Label with value, in the order the form asks, so the app can render and
+  // email the whole thing without holding a copy of the questions.
+  const fields = INTAKE_SECTIONS.flatMap((s) =>
+    s.fields
+      .filter((f) => isVisible(f, values))
+      .map((f) => ({
+        name: f.name,
+        label: f.label,
+        value: formatValue(values[f.name]),
+      })),
+  );
+
+  const area = values.area;
+  const payload = {
+    first_name: formatValue(values.first_name),
+    last_name: formatValue(values.last_name),
+    email: formatValue(values.email),
+    phone: formatValue(values.phone),
+    areas: Array.isArray(area) ? area : area ? [String(area)] : [],
+    red_flags: redFlagsIn(values),
+    answers: { fields, values },
+  };
 
   try {
-    const r = await fetch("https://api.resend.com/emails", {
+    const r = await fetch(ENDPOINT, {
       method: "POST",
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: FROM,
-        to: [to],
-        reply_to: formatValue(values.email) || undefined,
-        subject,
-        text: format(values),
-      }),
+      headers: { "Content-Type": "application/json", "x-intake-secret": secret },
+      body: JSON.stringify(payload),
+      // Manual, so an auth redirect is a failure rather than a success. Left
+      // to follow, a 307 to a login page is a 200 by the time fetch returns
+      // it, and this route would report a stored submission that never was.
+      redirect: "manual",
+      // A person is waiting on this button, and a hung request is worse than
+      // a clear failure they can retry.
+      signal: AbortSignal.timeout(15000),
     });
-    if (!r.ok) {
-      console.error("[cmpd-intake] resend failed", r.status, await r.text(), "\n" + format(values));
-      return NextResponse.json({ ok: true, delivered: false });
+
+    // Only an explicit ok from the app counts. Anything else, including a
+    // 2xx with the wrong body, is treated as not stored.
+    const body = (await r.json().catch(() => null)) as { ok?: boolean; id?: string } | null;
+    if (!r.ok || !body?.ok) {
+      console.error("[intake] app did not store the submission", r.status, JSON.stringify(body));
+      return NextResponse.json(
+        { error: "We could not save that. Try again in a moment." },
+        { status: 502 },
+      );
     }
   } catch (e) {
-    console.error("[cmpd-intake] resend threw", e, "\n" + format(values));
-    return NextResponse.json({ ok: true, delivered: false });
+    console.error("[intake] could not reach the app:", e);
+    return NextResponse.json(
+      { error: "We could not save that. Try again in a moment." },
+      { status: 502 },
+    );
   }
 
-  return NextResponse.json({ ok: true, delivered: true });
+  return NextResponse.json({ ok: true });
 }
