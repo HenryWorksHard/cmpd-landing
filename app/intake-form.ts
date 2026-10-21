@@ -1,13 +1,18 @@
 // The injury intake form.
 //
-// This is the clinical intake, taken verbatim from the practice's own form: it
-// is read before the call, so it is worth more than a contact form would be.
-// Five sections, and the questions are the questions. Do not trim them to make
-// the page shorter.
+// This is the clinical intake, taken from the practice's own form: it is read
+// before the call, so it is worth more than a contact form would be.
+//
+// The order is deliberate. Someone lands here because something hurts, so the
+// form asks about that first and leaves the admin until last: describe the
+// problem, answer the three screening questions, then history, then training,
+// then who you are. Screening sits second rather than last so a yes shows up
+// before someone has spent five minutes on the rest of it.
 //
 // Everything downstream is driven from this file. The page renders it, the API
-// route validates against it and formats the email from it, so adding or moving
-// a question means editing here and nowhere else.
+// route validates against it and the app formats the email from it, so adding
+// or moving a question means editing here and nowhere else. The database
+// stores the answers keyed by `name`, so no migration is needed either.
 
 export type Visibility = {
   /** Shown only when this other field's value is (or, for a multi, contains) one of these. */
@@ -24,7 +29,8 @@ type Base = {
 };
 
 export type Field =
-  | (Base & { type: "text" | "email" | "tel" | "date"; placeholder?: string })
+  | (Base & { type: "text" | "email" | "tel"; placeholder?: string })
+  | (Base & { type: "number"; min?: number; max?: number; placeholder?: string })
   | (Base & { type: "textarea"; placeholder?: string })
   /** One answer. */
   | (Base & { type: "choice"; options: string[] })
@@ -33,49 +39,23 @@ export type Field =
   /** A row of numbers, e.g. a 0 to 10 pain scale or 0 to 7 days a week. */
   | (Base & { type: "scale"; min: number; max: number; minLabel?: string; maxLabel?: string });
 
-export type Section = { n: string; title: string; note?: string; fields: Field[] };
+export type Section = {
+  n: string;
+  title: string;
+  note?: string;
+  /** Marks the screening block so the page can warn the moment it is answered. */
+  id?: string;
+  fields: Field[];
+};
 
 export const INTAKE_SECTIONS: Section[] = [
   {
     n: "01",
-    title: "Patient and contact information",
-    fields: [
-      { name: "first_name", label: "First name", type: "text", required: true },
-      { name: "last_name", label: "Last name", type: "text", required: true },
-      { name: "dob", label: "Date of birth", type: "date", required: true },
-      {
-        name: "gender",
-        label: "Gender identity",
-        type: "choice",
-        options: ["Male", "Female", "Non-binary", "Prefer not to say"],
-      },
-      { name: "phone", label: "Phone number", type: "tel", required: true },
-      { name: "email", label: "Email address", type: "email", required: true },
-      {
-        name: "address",
-        label: "Residential address",
-        type: "text",
-        required: true,
-        placeholder: "Street, suburb, postcode",
-      },
-      {
-        name: "emergency_contact",
-        label: "Emergency contact",
-        type: "text",
-        required: true,
-        placeholder: "Name and relationship",
-      },
-      { name: "emergency_phone", label: "Emergency contact phone", type: "tel", required: true },
-    ],
-  },
-
-  {
-    n: "02",
-    title: "Primary complaint and symptom history",
+    title: "What is going on",
     fields: [
       {
         name: "area",
-        label: "What is your primary musculoskeletal concern, or area of pain or discomfort?",
+        label: "Where is the problem?",
         type: "multi",
         required: true,
         help: "Pick the side where it applies.",
@@ -111,7 +91,7 @@ export const INTAKE_SECTIONS: Section[] = [
       },
       {
         name: "onset",
-        label: "How did the issue begin?",
+        label: "How did it begin?",
         type: "choice",
         required: true,
         options: [
@@ -127,7 +107,7 @@ export const INTAKE_SECTIONS: Section[] = [
       { name: "pain_worst", label: "Worst it has been in the last 24 hours", type: "scale", min: 0, max: 10, required: true },
       {
         name: "aggravators",
-        label: "What activities or movements make it worse?",
+        label: "What makes it worse?",
         type: "textarea",
         required: true,
         help: "For example sitting, squatting, reaching overhead, walking.",
@@ -157,8 +137,41 @@ export const INTAKE_SECTIONS: Section[] = [
   },
 
   {
+    n: "02",
+    id: "screening",
+    title: "Screening",
+    note: "Three questions that decide whether this is a training problem at all. Answer them honestly.",
+    fields: [
+      {
+        name: "rf_neuro",
+        label:
+          "Are you getting any unexplained numbness, tingling or weakness in your arms or legs?",
+        type: "choice",
+        required: true,
+        options: ["Yes", "No"],
+      },
+      {
+        name: "rf_systemic",
+        label:
+          "Any recent unexplained weight change, or change in bowel or bladder function?",
+        type: "choice",
+        required: true,
+        options: ["Yes", "No"],
+      },
+      {
+        name: "rf_night",
+        label:
+          "Any night pain that wakes you from sleep and does not ease when you move?",
+        type: "choice",
+        required: true,
+        options: ["Yes", "No"],
+      },
+    ],
+  },
+
+  {
     n: "03",
-    title: "Prior diagnosis and practitioner care",
+    title: "What you have been told so far",
     fields: [
       {
         name: "seen_practitioner",
@@ -244,7 +257,7 @@ export const INTAKE_SECTIONS: Section[] = [
 
   {
     n: "04",
-    title: "Baseline activity and goals",
+    title: "Your training now",
     fields: [
       {
         name: "days_light",
@@ -290,33 +303,14 @@ export const INTAKE_SECTIONS: Section[] = [
 
   {
     n: "05",
-    title: "Screening",
-    note: "Three questions that decide whether this is a training problem at all. Answer them honestly.",
+    title: "How to reach you",
+    note: "Last bit. The rest of the paperwork happens after the call, not now.",
     fields: [
-      {
-        name: "rf_neuro",
-        label:
-          "Are you getting any unexplained numbness, tingling or weakness in your arms or legs?",
-        type: "choice",
-        required: true,
-        options: ["Yes", "No"],
-      },
-      {
-        name: "rf_systemic",
-        label:
-          "Any recent unexplained weight change, or change in bowel or bladder function?",
-        type: "choice",
-        required: true,
-        options: ["Yes", "No"],
-      },
-      {
-        name: "rf_night",
-        label:
-          "Any night pain that wakes you from sleep and does not ease when you move?",
-        type: "choice",
-        required: true,
-        options: ["Yes", "No"],
-      },
+      { name: "first_name", label: "First name", type: "text", required: true },
+      { name: "last_name", label: "Last name", type: "text", required: true },
+      { name: "age", label: "Age", type: "number", required: true, min: 14, max: 100 },
+      { name: "email", label: "Email address", type: "email", required: true },
+      { name: "phone", label: "Phone number", type: "tel", required: true, help: "So we can call you about a time." },
     ],
   },
 ];
