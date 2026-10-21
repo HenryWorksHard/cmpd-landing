@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Nav from '../_components/Nav';
+import { MEDICAL_DISCLAIMER } from '../site';
 import {
   INTAKE_SECTIONS,
   isVisible,
@@ -311,9 +312,8 @@ export default function CustomPage() {
             </div>
 
             <p className="mt-8 text-xs leading-relaxed text-neutral-500">
-              This is not medical advice and nothing here is a diagnosis. If you have not been
-              cleared to train, see a qualified healthcare professional first. What you send is
-              used to prepare for your call and nothing else.
+              {MEDICAL_DISCLAIMER} What you send here is used to prepare for your call and
+              nothing else.
             </p>
           </form>
         )}

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { programs } from './programs';
-import { NAV_LINKS, LOGIN_URL, CUSTOM_URL } from './site';
+import { NAV_LINKS, LOGIN_URL, CUSTOM_URL, MEDICAL_DISCLAIMER } from './site';
 import Nav from './_components/Nav';
 import Media from './_components/Media';
 import Counter from './_components/Counter';
@@ -370,9 +370,7 @@ export default function LandingPage() {
 
           <div className="mt-10 flex flex-col items-center gap-4 border-t border-neutral-800 pt-8 text-center md:flex-row md:justify-between md:text-left">
             <p className="max-w-xl text-xs leading-relaxed text-neutral-500">
-              CMPD programs are for general fitness and are not medical advice. If you have an
-              injury or medical condition, consult a qualified healthcare professional and get
-              cleared before starting any program.
+              {MEDICAL_DISCLAIMER}
             </p>
             <p className="text-sm text-neutral-500">© {new Date().getFullYear()} CMPD. All rights reserved.</p>
           </div>
