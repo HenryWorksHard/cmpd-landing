@@ -76,6 +76,12 @@ export default function CustomPage() {
       setError('That email address does not look right.');
       return;
     }
+    const age = Number(values.age);
+    if (!Number.isInteger(age) || age < 14 || age > 100) {
+      setError('Age should be a whole number between 14 and 100.');
+      document.getElementById('f-age')?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      return;
+    }
 
     setSending(true);
     try {
@@ -191,6 +197,9 @@ export default function CustomPage() {
               type={f.type}
               value={(v as string) ?? ''}
               placeholder={f.placeholder}
+              {...(f.type === 'number'
+                ? { min: f.min, max: f.max, inputMode: 'numeric' as const, step: 1 }
+                : {})}
               autoComplete={
                 f.name === 'first_name'
                   ? 'given-name'
@@ -200,12 +209,10 @@ export default function CustomPage() {
                       ? 'email'
                       : f.name === 'phone'
                         ? 'tel'
-                        : f.name === 'dob'
-                          ? 'bday'
-                          : 'off'
+                        : 'off'
               }
               onChange={(e) => set(f.name, e.target.value)}
-              className={`${inputClass} ${f.type === 'date' ? 'max-w-[16rem] [color-scheme:dark]' : ''}`}
+              className={`${inputClass} ${f.type === 'number' ? 'max-w-[8rem]' : ''}`}
             />
           )}
         </div>
@@ -263,28 +270,34 @@ export default function CustomPage() {
         ) : (
           <form onSubmit={submit} noValidate className="mt-14">
             {INTAKE_SECTIONS.map((section) => (
-              <fieldset key={section.n} className="mb-12 border-0 p-0 last:mb-0">
-                <legend className="mb-6 flex w-full items-baseline gap-4 border-b border-neutral-800 pb-4">
-                  <span className="text-sm tabular-nums text-accent">{section.n}</span>
-                  <span className="text-lg font-semibold text-neutral-50 sm:text-xl">{section.title}</span>
-                </legend>
-                {section.note && <p className="-mt-2 mb-6 text-sm text-neutral-400">{section.note}</p>}
-                <div className="grid gap-7">{section.fields.map(renderField)}</div>
-              </fieldset>
-            ))}
+              <div key={section.n}>
+                <fieldset className="mb-12 border-0 p-0">
+                  <legend className="mb-6 flex w-full items-baseline gap-4 border-b border-neutral-800 pb-4">
+                    <span className="text-sm tabular-nums text-accent">{section.n}</span>
+                    <span className="text-lg font-semibold text-neutral-50 sm:text-xl">{section.title}</span>
+                  </legend>
+                  {section.note && <p className="-mt-2 mb-6 text-sm text-neutral-400">{section.note}</p>}
+                  <div className="grid gap-7">{section.fields.map(renderField)}</div>
+                </fieldset>
 
-            {flags.length > 0 && (
-              <div className="mb-8 rounded-2xl border-2 border-accent bg-neutral-900 p-6">
-                <p className="font-semibold text-neutral-50">See a doctor before you do anything else.</p>
-                <p className="mt-2 text-sm leading-relaxed text-neutral-400">
-                  You have answered yes to{' '}
-                  {flags.length === 1 ? 'a screening question' : `${flags.length} screening questions`}. Those are
-                  the ones that point at something a training program cannot fix and should not
-                  be worked around. Send this through by all means, but get it looked at
-                  medically first and we will talk after that.
-                </p>
+                {/* Right under the screening questions, not above the submit
+                    button twenty questions later. Somebody who answers yes
+                    should know what that means while they are still looking
+                    at the question. */}
+                {section.id === 'screening' && flags.length > 0 && (
+                  <div className="mb-12 rounded-2xl border-2 border-accent bg-neutral-900 p-6">
+                    <p className="font-semibold text-neutral-50">See a doctor before you do anything else.</p>
+                    <p className="mt-2 text-sm leading-relaxed text-neutral-400">
+                      You have answered yes to{' '}
+                      {flags.length === 1 ? 'a screening question' : `${flags.length} screening questions`}. Those are
+                      the ones that point at something a training program cannot fix and should not
+                      be worked around. Finish this and send it by all means, but get it looked at
+                      medically first and we will talk after that.
+                    </p>
+                  </div>
+                )}
               </div>
-            )}
+            ))}
 
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <button
