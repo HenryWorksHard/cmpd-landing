@@ -10,8 +10,9 @@
 // The `id` values are entitlement keys. Rename anything else you like; do not
 // rename these.
 //
-// Prices are $20 AUD per week of programming, which is where every number in
-// the `price` column comes from. Change the rate in ONE place: edit the prices
+// Prices are $19.99 AUD per week of programming, with the total rounded to a
+// .99 ending so it reads as a price and not the output of a multiplication
+// (8 x 19.99 is 159.92; we charge 159.99). Never more than 12c out. Change the rate in ONE place: edit the prices
 // here to match. Four sessions a week means the per-session figure is the rate
 // divided by four, which is the number worth putting in front of someone — a
 // single physio appointment is $90 or more.
@@ -21,7 +22,7 @@ export type Program = {
   area: string;        // area shown on the card + quiz option
   name: string;
   weeks: number;
-  price: number;       // one-time, in whole AUD dollars. weeks * 20.
+  price: number;       // one-time, in AUD. roughly weeks * 19.99, ending .99.
   blurb: string;
   // priceId?: string;  // ← Stripe price id, added in the Stripe phase
 };
@@ -32,7 +33,7 @@ export const programs: Program[] = [
     area: 'Shoulder',
     name: 'Shoulder Strength',
     weeks: 8,
-    price: 160,
+    price: 159.99,
     blurb: 'Overhead strength and control, rebuilt in order, for shoulders that need to stay robust.',
   },
   {
@@ -40,7 +41,7 @@ export const programs: Program[] = [
     area: 'Lower Back',
     name: 'Lower Back Strength',
     weeks: 8,
-    price: 160,
+    price: 159.99,
     blurb: 'A back that handles load. Bracing, hinging and carrying, progressed week by week.',
   },
   {
@@ -48,7 +49,7 @@ export const programs: Program[] = [
     area: 'Knee',
     name: 'Knee Strength',
     weeks: 10,
-    price: 200,
+    price: 199.99,
     blurb: 'Strength through the full range. Quads, hamstrings, calves, and the control around the joint.',
   },
   {
@@ -56,7 +57,7 @@ export const programs: Program[] = [
     area: 'Hip',
     name: 'Hip & Glute Strength',
     weeks: 8,
-    price: 160,
+    price: 159.99,
     blurb: 'Strong, stable hips and glutes. The base under every lift you do standing up.',
   },
   {
@@ -64,7 +65,7 @@ export const programs: Program[] = [
     area: 'Neck & Upper Back',
     name: 'Neck & Upper Back Strength',
     weeks: 6,
-    price: 120,
+    price: 119.99,
     blurb: 'Build the neck and upper back up so holding a position all day stops costing you.',
   },
   {
@@ -72,7 +73,7 @@ export const programs: Program[] = [
     area: 'Full Body',
     name: 'Return to Training',
     weeks: 12,
-    price: 240,
+    price: 239.99,
     blurb: 'A progressive full body rebuild for coming back after a longer layoff.',
   },
 ];
