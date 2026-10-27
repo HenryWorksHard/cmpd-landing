@@ -253,20 +253,20 @@ export default function LandingPage() {
             </p>
           </motion.div>
 
+          {/* Deliberately not links. These say what is covered; they are not a
+              menu. The quiz is the only way to a program, a price and a
+              purchase, so there is exactly one way in from this page. */}
           <div className="grid gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
             {programs.map((program, index) => (
-              <motion.div key={program.id} {...fadeUp} transition={{ duration: 0.5, delay: index * 0.08 }}>
-                <Link
-                  href="/quiz"
-                  className="flex h-full flex-col rounded-2xl border border-neutral-800 bg-neutral-950 p-6 transition-all hover:border-accent/60"
-                >
-                  <span className="text-xs font-medium uppercase tracking-wider text-accent">{program.area}</span>
-                  <h3 className="mt-2 text-lg font-semibold text-neutral-50 sm:text-xl">{program.name}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-neutral-400">{program.blurb}</p>
-                  <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-accent">
-                    Find your program <span aria-hidden>→</span>
-                  </span>
-                </Link>
+              <motion.div
+                key={program.id}
+                {...fadeUp}
+                transition={{ duration: 0.5, delay: index * 0.08 }}
+                className="flex h-full flex-col rounded-2xl border border-neutral-800 bg-neutral-950 p-6"
+              >
+                <span className="text-xs font-medium uppercase tracking-wider text-accent">{program.area}</span>
+                <h3 className="mt-2 text-lg font-semibold text-neutral-50 sm:text-xl">{program.name}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-neutral-400">{program.blurb}</p>
               </motion.div>
             ))}
           </div>
