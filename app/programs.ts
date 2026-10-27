@@ -10,14 +10,19 @@
 // The `id` values are entitlement keys. Rename anything else you like; do not
 // rename these.
 //
-// PLACEHOLDER prices/weeks. Swap for the real programs.
+// Prices are $19.99 AUD per week of programming, with the total rounded to a
+// .99 ending so it reads as a price and not the output of a multiplication
+// (8 x 19.99 is 159.92; we charge 159.99). Never more than 12c out. Change the rate in ONE place: edit the prices
+// here to match. Four sessions a week means the per-session figure is the rate
+// divided by four, which is the number worth putting in front of someone — a
+// single physio appointment is $90 or more.
 
 export type Program = {
   id: string;          // stable slug, also the quiz answer value + entitlement key
   area: string;        // area shown on the card + quiz option
   name: string;
   weeks: number;
-  price: number;       // one-time, in whole dollars (placeholder)
+  price: number;       // one-time, in AUD. roughly weeks * 19.99, ending .99.
   blurb: string;
   // priceId?: string;  // ← Stripe price id, added in the Stripe phase
 };
@@ -28,7 +33,7 @@ export const programs: Program[] = [
     area: 'Shoulder',
     name: 'Shoulder Strength',
     weeks: 8,
-    price: 49,
+    price: 159.99,
     blurb: 'Overhead strength and control, rebuilt in order, for shoulders that need to stay robust.',
   },
   {
@@ -36,7 +41,7 @@ export const programs: Program[] = [
     area: 'Lower Back',
     name: 'Lower Back Strength',
     weeks: 8,
-    price: 49,
+    price: 159.99,
     blurb: 'A back that handles load. Bracing, hinging and carrying, progressed week by week.',
   },
   {
@@ -44,7 +49,7 @@ export const programs: Program[] = [
     area: 'Knee',
     name: 'Knee Strength',
     weeks: 10,
-    price: 59,
+    price: 199.99,
     blurb: 'Strength through the full range. Quads, hamstrings, calves, and the control around the joint.',
   },
   {
@@ -52,7 +57,7 @@ export const programs: Program[] = [
     area: 'Hip',
     name: 'Hip & Glute Strength',
     weeks: 8,
-    price: 49,
+    price: 159.99,
     blurb: 'Strong, stable hips and glutes. The base under every lift you do standing up.',
   },
   {
@@ -60,7 +65,7 @@ export const programs: Program[] = [
     area: 'Neck & Upper Back',
     name: 'Neck & Upper Back Strength',
     weeks: 6,
-    price: 39,
+    price: 119.99,
     blurb: 'Build the neck and upper back up so holding a position all day stops costing you.',
   },
   {
@@ -68,12 +73,26 @@ export const programs: Program[] = [
     area: 'Full Body',
     name: 'Return to Training',
     weeks: 12,
-    price: 69,
+    price: 239.99,
     blurb: 'A progressive full body rebuild for coming back after a longer layoff.',
   },
 ];
 
 export const getProgram = (id: string) => programs.find((p) => p.id === id);
 
-// Interim CTA target until per-program Stripe Checkout is wired.
-export const SIGNUP_URL = 'https://app.cmpdcollective.com/signup';
+// ── how the price gets said out loud ──────────────────────────────────────
+// $120 is a number people weigh up. $3.75 a session is a number they compare
+// to a coffee, and it is the same fact. Both are shown: the total so nobody
+// feels misled, the per-session line so the total lands in proportion.
+
+/** Sessions in the whole program. Every program runs four a week. */
+export const SESSIONS_PER_WEEK = 4;
+
+export const sessionCount = (p: Program) => p.weeks * SESSIONS_PER_WEEK;
+
+/** e.g. "3.75" — trailing zeros kept, because $3.8 reads like a mistake. */
+export const perSession = (p: Program) =>
+  (p.price / sessionCount(p)).toFixed(2);
+
+/** e.g. "2.14" */
+export const perDay = (p: Program) => (p.price / (p.weeks * 7)).toFixed(2);
