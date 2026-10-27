@@ -44,25 +44,24 @@ const fadeUp = {
 const steps = [
   {
     n: '01',
-    title: 'Tell us about the area',
+    title: 'Select your area',
     body: 'Three questions: the area, how long it has been an issue, and whether you have been cleared to train.',
   },
   {
     n: '02',
-    title: 'We construct a best-practice program for your presentation',
-    body: 'No guesswork. It matches the area and the point you are starting from.',
+    title: 'Get matched with your suited program',
+    body: 'No guesswork. It is constructed to best practice for your presentation and the point you are starting from.',
   },
   {
     n: '03',
-    title: 'Train in the app',
-    body: 'Four sessions a week, every exercise on video, every set logged as you go.',
+    title: 'Start training and logging through the app',
+    body: 'Every exercise on video, every set logged as you go, and the week in front of you already decided.',
   },
 ];
 
 // `n` counts up the first time the row is seen; the rest is plain type.
 const proofPoints: { n?: number; value: string; label: string }[] = [
   { n: 6, value: 'programs', label: 'One per area' },
-  { n: 4, value: 'days', label: 'a week, 30 to 45 minutes' },
   { value: 'Gym-based', label: 'Barbells, machines, cables' },
   { value: 'In the app', label: 'Every set logged as you train' },
 ];
@@ -88,7 +87,7 @@ export default function LandingPage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
               <span className="mb-7 inline-flex items-center gap-2 rounded-full border border-neutral-700 bg-neutral-900/50 px-4 py-1.5 text-xs text-neutral-300 sm:text-sm">
                 <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
-                Strength programs built around one area
+                Strength where you need it
               </span>
             </motion.div>
 
@@ -108,8 +107,8 @@ export default function LandingPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-neutral-400 sm:text-lg md:text-xl"
             >
-              Strength programs for shoulders, backs, knees and hips. Four gym sessions a
-              week, run in the CMPD app.
+              General strength programs targeting your area in need. All delivered
+              through CMPD.
             </motion.p>
 
             <motion.div
@@ -143,7 +142,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8, delay: 0.5 }}
             className="mt-16 lg:mt-24"
           >
-            <div className="grid grid-cols-2 gap-6 rounded-2xl border border-neutral-800 bg-neutral-900/50 p-6 backdrop-blur-sm sm:gap-8 sm:p-8 lg:grid-cols-4 lg:gap-12">
+            <div className="grid grid-cols-1 gap-6 rounded-2xl border border-neutral-800 bg-neutral-900/50 p-6 backdrop-blur-sm sm:grid-cols-3 sm:gap-8 sm:p-8 lg:gap-12">
               {proofPoints.map((p) => (
                 <div key={p.value} className="text-center">
                   <p className="text-lg font-bold tabular-nums gradient-text sm:text-2xl">
@@ -178,7 +177,7 @@ export default function LandingPage() {
           <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="mx-auto mb-12 max-w-2xl text-center sm:mb-16">
             <span className="text-xs font-medium uppercase tracking-wider text-accent sm:text-sm">How it works</span>
             <h2 className="mt-4 text-3xl font-bold tracking-tight text-neutral-50 sm:text-4xl lg:text-5xl">
-              From sore to strong in three steps
+              From weak to strong in three steps
             </h2>
           </motion.div>
 
@@ -296,7 +295,7 @@ export default function LandingPage() {
             <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.1 }}>
               <span className="text-xs font-medium uppercase tracking-wider text-accent sm:text-sm">Why it works</span>
               <h2 className="mt-4 text-3xl font-bold tracking-tight text-neutral-50 sm:text-4xl lg:text-5xl">
-                Built by a coach who trains through injuries
+                Built by a coach who knows how to handle training with injury
               </h2>
               {/* TODO: Eddy's real qualification / credential goes here. Keep it
                   factual. This is the line people will check. */}
