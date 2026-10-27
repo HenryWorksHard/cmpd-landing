@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: "CMPD | Strength programs for the areas that give you trouble",
   description:
-    "Strength programs for shoulders, backs, knees, hips and necks. Four gym sessions a week, run in the CMPD app. Carrying an injury? That one gets written for you.",
+    "General strength programs targeting your area in need: shoulders, backs, knees, hips and necks. All delivered through the CMPD app. Carrying an injury? That one gets written for you.",
   keywords: [
     "shoulder strengthening program",
     "lower back strengthening program",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "CMPD | Strength where you need it",
     description:
-      "One program per area. Four gym sessions a week, 30 to 45 minutes, run in the CMPD app.",
+      "One program per area, delivered through the CMPD app.",
     url: SITE,
     type: "website",
   },
