@@ -300,8 +300,8 @@ export default function LandingPage() {
               {/* TODO: Eddy's real qualification / credential goes here. Keep it
                   factual. This is the line people will check. */}
               <p className="mt-6 text-base leading-relaxed text-neutral-400 sm:text-lg">
-                Each program is built around one area. What to load, how to progress it, and
-                what to keep working while you do.
+                Every program is written for one area at a time. What to load, how to
+                progress it, and what to keep training while you do.
               </p>
             </motion.div>
           </div>
