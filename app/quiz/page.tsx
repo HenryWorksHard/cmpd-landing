@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -56,9 +56,47 @@ const questions: Question[] = [
   },
 ];
 
+const QUIZ_KEY = 'cmpd:quiz';
+
 export default function QuizPage() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+
+  // Answers survive leaving the page, because leaving the page is the normal
+  // thing to do here: the Get this program button sends you to Stripe, and
+  // coming back — whether by the browser's back button or by cancelling the
+  // checkout — used to drop you on question one with everything lost.
+  //
+  // sessionStorage rather than localStorage: it should last as long as the
+  // tab and no longer. Nobody wants last month's answers waiting for them.
+  const [restored, setRestored] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(QUIZ_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as { step?: number; answers?: Record<string, string> };
+        if (parsed.answers && typeof parsed.step === 'number') {
+          setAnswers(parsed.answers);
+          // Clamped, so a stored step from an older version of the quiz can
+          // never land past the end of the current one.
+          setStep(Math.min(Math.max(0, parsed.step), questions.length));
+        }
+      }
+    } catch {
+      // Private mode, or storage disabled. Start fresh; nothing breaks.
+    }
+    setRestored(true);
+  }, []);
+
+  useEffect(() => {
+    if (!restored) return;
+    try {
+      sessionStorage.setItem(QUIZ_KEY, JSON.stringify({ step, answers }));
+    } catch {
+      // Over quota or blocked. The quiz still works, it just will not resume.
+    }
+  }, [restored, step, answers]);
 
   const isResult = step >= questions.length;
   const current = questions[step];
@@ -74,6 +112,11 @@ export default function QuizPage() {
   const restart = () => {
     setAnswers({});
     setStep(0);
+    try {
+      sessionStorage.removeItem(QUIZ_KEY);
+    } catch {
+      // Nothing to clear if storage is unavailable.
+    }
   };
 
   const recommended = getProgram(answers.area) ?? programs[0];
@@ -120,7 +163,7 @@ export default function QuizPage() {
       </nav>
 
       {/* Progress bar */}
-      {!isResult && (
+      {restored && !isResult && (
         <div className="h-1 bg-neutral-800">
           <motion.div
             className="h-full bg-accent"
@@ -133,6 +176,12 @@ export default function QuizPage() {
 
       <main className="flex flex-1 items-center justify-center px-5 py-10 sm:px-6 sm:py-12">
         <div className="w-full max-w-xl">
+          {/* One tick, while we check whether there are answers to come back
+              to. Without it a returning visitor sees question one appear and
+              then vanish, which reads as the quiz having lost their place. */}
+          {!restored ? (
+            <div className="h-64" aria-hidden />
+          ) : (
           <AnimatePresence mode="wait">
             {!isResult ? (
               <motion.div
@@ -244,6 +293,7 @@ export default function QuizPage() {
               </motion.div>
             )}
           </AnimatePresence>
+          )}
         </div>
       </main>
     </div>
