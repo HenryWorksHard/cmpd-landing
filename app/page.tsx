@@ -354,6 +354,9 @@ export default function LandingPage() {
                   {l.label}
                 </Link>
               ))}
+              <Link href="/privacy" className="text-neutral-400 transition-colors hover:text-neutral-50">
+                Privacy
+              </Link>
               <a href={LOGIN_URL} className="text-neutral-400 transition-colors hover:text-neutral-50">
                 Sign In
               </a>
