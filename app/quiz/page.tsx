@@ -121,28 +121,7 @@ export default function QuizPage() {
 
   const recommended = getProgram(answers.area) ?? programs[0];
 
-  const [buying, setBuying] = useState(false);
-  const [buyError, setBuyError] = useState<string | null>(null);
 
-  // Stripe Checkout. The amount is resolved server side from Stripe itself,
-  // so nothing about the price travels from this page.
-  async function buy() {
-    setBuyError(null);
-    setBuying(true);
-    try {
-      const r = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slug: recommended.id }),
-      });
-      const d = await r.json().catch(() => null);
-      if (!r.ok || !d?.url) throw new Error(d?.error ?? 'Could not start checkout.');
-      window.location.href = d.url;
-    } catch (e) {
-      setBuyError(e instanceof Error ? e.message : 'Could not start checkout.');
-      setBuying(false);
-    }
-  }
   // An actual injury, or nobody has looked at it yet. Either way an
   // off-the-shelf program is the wrong first answer, so the individual path is
   // offered next to the checkout rather than in a footnote under it.
@@ -252,14 +231,12 @@ export default function QuizPage() {
                       Works out at ${perDay(recommended)} a day. No subscription, nothing to cancel.
                     </p>
                   </div>
-                  <button
-                    onClick={buy}
-                    disabled={buying}
-                    className="mt-6 block w-full rounded-md bg-accent py-3.5 text-center font-semibold text-neutral-950 transition-colors hover:bg-accent-light disabled:opacity-60"
+                  <Link
+                    href={`/program/${recommended.id}`}
+                    className="mt-6 block w-full rounded-md bg-accent py-3.5 text-center font-semibold text-neutral-950 transition-colors hover:bg-accent-light"
                   >
-                    {buying ? 'Taking you to checkout' : 'Get this program'}
-                  </button>
-                  {buyError && <p className="mt-3 text-sm text-red-400">{buyError}</p>}
+                    See the full program
+                  </Link>
                 </div>
 
                 {needsIndividual && (
