@@ -126,3 +126,33 @@ a, button { -webkit-tap-highlight-color: transparent; }
     transparent 10px 20px
   );
 }
+
+/* ─── the page shell ───────────────────────────────────────────────────── */
+
+/* Every full-width section is wrapped in this instead of a hard-coded
+   max-width, so the whole site widens together.
+   
+   1280px is right for a laptop and wrong for a 27in monitor, where it is a
+   ribbon down the middle with a third of the screen black on either side.
+   Past 1536px the shell opens up and the gutters grow with it, which keeps
+   the content off the bezel without pinning it to the centre.
+   
+   Padding lives in here rather than in a px-* class on every call site:
+   these rules sit outside Tailwind's layers, so they win any tie and a
+   leftover px-* would silently do nothing. If you use .shell, do not also
+   set horizontal padding. */
+.shell {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 80rem;
+  padding-inline: 1.25rem;
+}
+@media (min-width: 640px)  { .shell { padding-inline: 1.5rem; } }
+@media (min-width: 1024px) { .shell { padding-inline: 2rem; } }
+@media (min-width: 1536px) { .shell { max-width: 96rem;  padding-inline: 3rem; } }
+@media (min-width: 1920px) { .shell { max-width: 110rem; padding-inline: 4rem; } }
+
+/* Text does not get to use all of that. A line of body copy is unreadable
+   much past 75 characters however much room is going spare, so prose keeps
+   its own measure inside the wider shell. */
+.measure { max-width: 42rem; }
