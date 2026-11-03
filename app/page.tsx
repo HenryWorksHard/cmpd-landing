@@ -82,8 +82,8 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(250,204,21,0.12),transparent)]" />
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:3rem_3rem] sm:bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
-        <div className="relative mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8 lg:py-28">
-          <div className="mx-auto max-w-4xl text-center">
+        <div className="relative shell py-20 lg:py-28">
+          <div className="mx-auto max-w-4xl text-center 2xl:max-w-5xl">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -151,7 +151,7 @@ export default function LandingPage() {
 
       {/* Hero artwork. Renders nothing at all until /media/hero.mp4 exists. */}
       {heroArt && (
-        <section className="mx-auto max-w-7xl px-5 pb-4 sm:px-6 lg:px-8">
+        <section className="shell pb-4">
           <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
             <Media
               src="/media/hero.mp4"
@@ -166,7 +166,7 @@ export default function LandingPage() {
 
       {/* How it works */}
       <section id="how" className="bg-neutral-900 py-20 sm:py-24 lg:py-32">
-        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div className="shell">
           <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="mx-auto mb-12 max-w-2xl text-center sm:mb-16">
             <span className="text-xs font-medium uppercase tracking-wider text-accent sm:text-sm">How it works</span>
             <h2 className="mt-4 text-3xl font-bold tracking-tight text-neutral-50 sm:text-4xl lg:text-5xl">
@@ -193,7 +193,7 @@ export default function LandingPage() {
 
       {/* The two paths. The distinction the whole site turns on. */}
       <section className="py-20 sm:py-24 lg:py-32">
-        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div className="shell">
           <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
             <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
               <span className="text-xs font-medium uppercase tracking-wider text-accent sm:text-sm">Which one are you</span>
@@ -235,7 +235,7 @@ export default function LandingPage() {
       <section id="programs" className="relative overflow-hidden bg-neutral-900 py-20 sm:py-24 lg:py-32">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,rgba(250,204,21,0.06),transparent)]" />
 
-        <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div className="relative shell">
           <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="mx-auto mb-12 max-w-2xl text-center sm:mb-16">
             <span className="text-xs font-medium uppercase tracking-wider text-accent sm:text-sm">What we cover</span>
             <h2 className="mt-4 text-3xl font-bold tracking-tight text-neutral-50 sm:text-4xl lg:text-5xl">
@@ -278,7 +278,7 @@ export default function LandingPage() {
 
       {/* Why it works */}
       <section className="py-20 sm:py-24 lg:py-32">
-        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div className="shell">
           <div className={`grid items-center gap-10 lg:gap-16 ${coachArt ? 'lg:grid-cols-2' : 'mx-auto max-w-2xl text-center'}`}>
             {coachArt && (
               <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
@@ -343,7 +343,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="border-t border-neutral-800 bg-neutral-950">
-        <div className="mx-auto max-w-7xl px-5 py-12 sm:px-6 lg:px-8">
+        <div className="shell py-12">
           <div className="flex flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
             <Link href="/" className="flex items-center" aria-label="CMPD, home">
               <Image src="/logo.png" alt="CMPD" width={1132} height={392} sizes="130px" className="h-7 w-auto" />
