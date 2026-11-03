@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { programs, getProgram, SIGNUP_URL } from '../programs';
+import { programs, getProgram, perSession, perDay, sessionCount } from '../programs';
 import { CUSTOM_URL } from '../site';
 
 // The matcher for the generalised programs, and the only path to a program, a
@@ -77,6 +77,29 @@ export default function QuizPage() {
   };
 
   const recommended = getProgram(answers.area) ?? programs[0];
+
+  const [buying, setBuying] = useState(false);
+  const [buyError, setBuyError] = useState<string | null>(null);
+
+  // Stripe Checkout. The amount is resolved server side from Stripe itself,
+  // so nothing about the price travels from this page.
+  async function buy() {
+    setBuyError(null);
+    setBuying(true);
+    try {
+      const r = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug: recommended.id }),
+      });
+      const d = await r.json().catch(() => null);
+      if (!r.ok || !d?.url) throw new Error(d?.error ?? 'Could not start checkout.');
+      window.location.href = d.url;
+    } catch (e) {
+      setBuyError(e instanceof Error ? e.message : 'Could not start checkout.');
+      setBuying(false);
+    }
+  }
   // An actual injury, or nobody has looked at it yet. Either way an
   // off-the-shelf program is the wrong first answer, so the individual path is
   // offered next to the checkout rather than in a footnote under it.
@@ -163,19 +186,31 @@ export default function QuizPage() {
                   <span className="text-xs font-medium uppercase tracking-wider text-accent">{recommended.area}</span>
                   <h2 className="mt-2 text-xl font-semibold">{recommended.name}</h2>
                   <p className="mt-2 text-sm text-neutral-400">{recommended.blurb}</p>
+                  {/* The per-session number first, because $3.75 is a figure
+                      people can place and $120 is one they have to weigh up.
+                      The total is right underneath it so nobody can say they
+                      were not told. Both are arithmetic on the same price. */}
                   <div className="mt-6 border-t border-neutral-800 pt-6">
-                    <span className="text-3xl font-bold">${recommended.price}</span>
-                    <span className="text-sm text-neutral-500"> one-time</span>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-3xl font-bold">${perSession(recommended)}</span>
+                      <span className="text-sm text-neutral-400">a session</span>
+                    </div>
+                    <p className="mt-2 text-sm text-neutral-300">
+                      <span className="font-semibold text-neutral-50">${recommended.price}</span> once,
+                      for {sessionCount(recommended)} sessions over {recommended.weeks} weeks.
+                    </p>
                     <p className="mt-1 text-sm text-neutral-500">
-                      {recommended.weeks}-week program, 4 sessions a week
+                      Works out at ${perDay(recommended)} a day. No subscription, nothing to cancel.
                     </p>
                   </div>
-                  <a
-                    href={SIGNUP_URL}
-                    className="mt-6 block w-full rounded-md bg-accent py-3.5 text-center font-semibold text-neutral-950 transition-colors hover:bg-accent-light"
+                  <button
+                    onClick={buy}
+                    disabled={buying}
+                    className="mt-6 block w-full rounded-md bg-accent py-3.5 text-center font-semibold text-neutral-950 transition-colors hover:bg-accent-light disabled:opacity-60"
                   >
-                    Get this program
-                  </a>
+                    {buying ? 'Taking you to checkout' : 'Get this program'}
+                  </button>
+                  {buyError && <p className="mt-3 text-sm text-red-400">{buyError}</p>}
                 </div>
 
                 {needsIndividual && (
