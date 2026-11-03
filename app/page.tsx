@@ -84,13 +84,6 @@ export default function LandingPage() {
 
         <div className="relative mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8 lg:py-28">
           <div className="mx-auto max-w-4xl text-center">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <span className="mb-7 inline-flex items-center gap-2 rounded-full border border-neutral-700 bg-neutral-900/50 px-4 py-1.5 text-xs text-neutral-300 sm:text-sm">
-                <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
-                Strength where you need it
-              </span>
-            </motion.div>
-
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
